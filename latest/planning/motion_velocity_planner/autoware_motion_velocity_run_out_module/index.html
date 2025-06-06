@@ -13798,6 +13798,8 @@ or if a collision was detected with the object, then it cannot be ignored.</p>
 First, we only keep predicted paths that have a confidence value above the <code>confidence_filtering.threshold</code> parameter.
 If, <code>confidence_filtering.only_use_highest</code> is set to <code>true</code> then for each object only the predicted paths that have the higher confidence value are kept.
 Next, the remaining predicted paths are cut according to the segments prepared in the previous step.</p>
+<p>To guarantee that parts of the predicted paths are never ignored,
+parameters <code>preserved_duration</code> and <code>preserved_distance</code> can be used to set a minimum duration and/or distance that cannot be cut or ignored.</p>
 <p>The following figures shows an example where crosswalks are used to ignore pedestrians and to cut their predicted paths.</p>
 <table>
 <thead>
@@ -14137,6 +14139,27 @@ Higher values prevent incorrect decisions in case of noisy object predictions, b
 <td>array</td>
 <td>subtypes of lanelets in the vector map used to ignore objects</td>
 <td>['NONE']</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>DEFAULT.preserved_duration</td>
+<td>float</td>
+<td>[s] when cutting a predicted path or ignoring an object, at least this much duration is preserved from the predicted paths</td>
+<td>0.0</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>DEFAULT.preserved_distance</td>
+<td>float</td>
+<td>[m] when cutting a predicted path or ignoring an object, at least this much distance is preserved from the predicted paths</td>
+<td>0.0</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>DEFAULT.standstill_duration_after_cut</td>
+<td>float</td>
+<td>[s] after cutting a predicted path, assume the object stands still at the last point for this duration</td>
+<td>2.0</td>
 <td>N/A</td>
 </tr>
 <tr>
