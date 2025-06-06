@@ -316,7 +316,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/autoware_universe/main/map/autoware_map_height_fitter/" class="md-tabs__link">
+      <a href="/autoware_universe/main/map/autoware_map_tf_generator/" class="md-tabs__link">
         Map
       </a>
     </li>
@@ -3501,8 +3501,6 @@
         
           
         
-          
-        
       
       
         <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -3985,14 +3983,14 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="/autoware_universe/main/localization/autoware_pose_initializer/">Autoware pose initializer</a>
+          <a href="/autoware_universe/main/localization/autoware_pose_instability_detector/">Autoware pose instability detector</a>
           
         </div>
       
       <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_7_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_5_7">
           <span class="md-nav__icon md-icon"></span>
-          Autoware pose initializer
+          Autoware pose instability detector
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -4028,54 +4026,6 @@
             
           
         
-      
-      
-        
-        
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="/autoware_universe/main/localization/autoware_pose_instability_detector/">Autoware pose instability detector</a>
-          
-        </div>
-      
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_8_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_5_8">
-          <span class="md-nav__icon md-icon"></span>
-          Autoware pose instability detector
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-      
-      
-      
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_9" >
-      
-      
-        
-          
-            
-          
-        
           
         
           
@@ -4093,14 +4043,14 @@
         <div class="md-nav__link md-nav__link--index ">
           <a href="/autoware_universe/main/localization/yabloc/">Yabloc</a>
           
-            <label for="__nav_5_9">
+            <label for="__nav_5_8">
               <span class="md-nav__icon md-icon"></span>
             </label>
           
         </div>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_9_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_5_9">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_8">
           <span class="md-nav__icon md-icon"></span>
           Yabloc
         </label>
@@ -4121,7 +4071,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_9_2" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_8_2" >
       
       
         
@@ -4138,8 +4088,8 @@
           
         </div>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_2_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_5_9_2">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_8_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_8_2">
           <span class="md-nav__icon md-icon"></span>
           Yabloc common
         </label>
@@ -4167,7 +4117,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_9_3" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_8_3" >
       
       
         
@@ -4184,8 +4134,8 @@
           
         </div>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_3_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_5_9_3">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_8_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_8_3">
           <span class="md-nav__icon md-icon"></span>
           Yabloc image processing
         </label>
@@ -4213,7 +4163,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_9_4" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_8_4" >
       
       
         
@@ -4230,8 +4180,8 @@
           
         </div>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_4_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_5_9_4">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_8_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_8_4">
           <span class="md-nav__icon md-icon"></span>
           Yabloc monitor
         </label>
@@ -4259,7 +4209,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_9_5" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_8_5" >
       
       
         
@@ -4276,8 +4226,8 @@
           
         </div>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_5_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_5_9_5">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_8_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_8_5">
           <span class="md-nav__icon md-icon"></span>
           Yabloc particle filter
         </label>
@@ -4305,7 +4255,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_9_6" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_8_6" >
       
       
         
@@ -4322,8 +4272,8 @@
           
         </div>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_6_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_5_9_6">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_8_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_8_6">
           <span class="md-nav__icon md-icon"></span>
           Yabloc pose initializer
         </label>
@@ -4374,8 +4324,6 @@
         
           
         
-          
-        
       
       
         <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
@@ -4418,14 +4366,14 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="/autoware_universe/main/map/autoware_map_height_fitter/">Autoware map height fitter</a>
+          <a href="/autoware_universe/main/map/autoware_map_tf_generator/">Autoware map tf generator</a>
           
         </div>
       
       <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_6_1">
           <span class="md-nav__icon md-icon"></span>
-          Autoware map height fitter
+          Autoware map tf generator
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -4458,64 +4406,16 @@
       
         
           
-            
-          
         
       
       
-        
-        
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="/autoware_universe/main/map/autoware_map_tf_generator/">Autoware map tf generator</a>
-          
-        </div>
-      
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_6_2">
-          <span class="md-nav__icon md-icon"></span>
-          Autoware map tf generator
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-      
-      
-      
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6_3" >
-      
-      
-        
-          
-        
-      
-      
-        <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_6_2" id="__nav_6_2_label" tabindex="0">
           Util
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_6_3">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6_2">
           <span class="md-nav__icon md-icon"></span>
           Util
         </label>
@@ -4534,7 +4434,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6_3_1" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6_2_1" >
       
       
         
@@ -4551,8 +4451,8 @@
           
         </div>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_1_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_6_3_1">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_2_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6_2_1">
           <span class="md-nav__icon md-icon"></span>
           Lanelet2 map preprocessor
         </label>

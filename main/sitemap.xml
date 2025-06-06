@@ -341,11 +341,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware_universe/main/localization/autoware_pose_initializer/</loc>
-         <lastmod>2025-06-06</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://autowarefoundation.github.io/autoware_universe/main/localization/autoware_pose_instability_detector/</loc>
          <lastmod>2025-06-06</lastmod>
          <changefreq>daily</changefreq>
@@ -377,11 +372,6 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware_universe/main/localization/yabloc/yabloc_pose_initializer/</loc>
-         <lastmod>2025-06-06</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware_universe/main/map/autoware_map_height_fitter/</loc>
          <lastmod>2025-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
