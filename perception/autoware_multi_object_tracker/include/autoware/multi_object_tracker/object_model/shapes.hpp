@@ -22,6 +22,7 @@
 #include <tf2_ros/buffer.h>
 
 #include <string>
+#include <utility>
 
 namespace autoware::multi_object_tracker
 {
@@ -45,12 +46,10 @@ bool get2dPrecisionRecallGIoU(
 bool convertConvexHullToBoundingBox(
   const types::DynamicObject & input_object, types::DynamicObject & output_object);
 
-void getNearestCornerOrSurface(
-  const geometry_msgs::msg::Transform & self_transform, types::DynamicObject & object);
+std::pair<double, double> getObjectZRange(const types::DynamicObject & object);
 
-void calcAnchorPointOffset(
-  const types::DynamicObject & this_object, Eigen::Vector2d & tracking_offset,
-  types::DynamicObject & offset_object);
+double get3dGeneralizedIoU(
+  const types::DynamicObject & source_object, const types::DynamicObject & target_object);
 }  // namespace shapes
 }  // namespace autoware::multi_object_tracker
 
