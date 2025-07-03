@@ -8550,6 +8550,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_8_6_5_2" id="__nav_8_6_5_2_label" tabindex="0">
@@ -8642,6 +8644,20 @@
     <li class="md-nav__item">
       <a href="../../planning/motion_velocity_planner/autoware_motion_velocity_obstacle_velocity_limiter_module/" class="md-nav__link">
         Obstacle Velocity Limiter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../planning/motion_velocity_planner/autoware_motion_velocity_run_out_module/" class="md-nav__link">
+        Run Out
       </a>
     </li>
   
@@ -9047,10 +9063,66 @@
   
   
   
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8_10_5" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_10_5" id="__nav_8_10_5_label" tabindex="0">
+          Planning Validator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_8_10_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8_10_5">
+          <span class="md-nav__icon md-icon"></span>
+          Planning Validator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
     <li class="md-nav__item">
-      <a href="../../planning/autoware_planning_validator" class="md-nav__link">
-        Planning Validator
+      <a href="../../planning/planning_validator/autoware_planning_validator" class="md-nav__link">
+        About Planning Validator
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../planning/planning_validator/autoware_planning_validator_intersection_collision_checker" class="md-nav__link">
+        Intersection Collision Checker
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -13607,6 +13679,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#role" class="md-nav__link">
+    Role
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#inputs-outputs" class="md-nav__link">
     Inputs / Outputs
   </a>
@@ -13641,9 +13720,36 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#functionality" class="md-nav__link">
+    Functionality
+  </a>
+  
+    <nav class="md-nav" aria-label="Functionality">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#main-functionality" class="md-nav__link">
+    Main Functionality
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sub-functionality" class="md-nav__link">
+    Sub-Functionality
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#filter-function" class="md-nav__link">
     Filter function
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -13674,6 +13780,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#caution" class="md-nav__link">
+    Caution
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -13694,7 +13807,9 @@
 
 <div><h1 id="vehicle_cmd_gate">vehicle_cmd_gate<a class="headerlink" href="#vehicle_cmd_gate" title="Permanent link">#</a></h1>
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
-<p><code>vehicle_cmd_gate</code> is the package to get information from emergency handler, planning module, external controller, and send a msg to vehicle.</p>
+<p><code>vehicle_cmd_gate</code> is the package to get information from emergency handler, planning module, and external controller, and send a message to the vehicle.</p>
+<h2 id="role">Role<a class="headerlink" href="#role" title="Permanent link">#</a></h2>
+<p>Receive multiple control commands and select one to forward to the vehicle.</p>
 <h2 id="inputs-outputs">Inputs / Outputs<a class="headerlink" href="#inputs-outputs" title="Permanent link">#</a></h2>
 <h3 id="input">Input<a class="headerlink" href="#input" title="Permanent link">#</a></h3>
 <table>
@@ -13972,7 +14087,20 @@
 </tr>
 </tbody>
 </table>
-<h2 id="filter-function">Filter function<a class="headerlink" href="#filter-function" title="Permanent link">#</a></h2>
+<h2 id="functionality">Functionality<a class="headerlink" href="#functionality" title="Permanent link">#</a></h2>
+<h3 id="main-functionality">Main Functionality<a class="headerlink" href="#main-functionality" title="Permanent link">#</a></h3>
+<ul>
+<li>Receive multiple control commands (from Autoware planning, emergency handler, remote control, etc.) and select one to forward to the vehicle.</li>
+<li>Apply a final guard on the selected command to enforce absolute safety limits (e.g., maximum steering rate). This is not a comfort filter.</li>
+<li>Enforce transition guards during mode changes into autonomous driving (e.g., remote→autonomous, manual→autonomous) to limit sudden changes. Integration with the Operation Transition Manager is recommended, though code boundaries should be maintained due to its complexity.</li>
+</ul>
+<h3 id="sub-functionality">Sub-Functionality<a class="headerlink" href="#sub-functionality" title="Permanent link">#</a></h3>
+<ul>
+<li>Check heartbeat signals to verify connectivity for each input (e.g., emergency external heartbeat).</li>
+<li>Publish status indicating whether the final guard is active. Active guard in autonomous mode implies an unexpected constraint in command generation and requires attention.</li>
+<li>Leverage guard status during mode transitions to notify operators/drivers that a strong constraint is active (focus on "transition in progress" rather than simple filter activation).</li>
+</ul>
+<h3 id="filter-function">Filter function<a class="headerlink" href="#filter-function" title="Permanent link">#</a></h3>
 <p>This module incorporates a limitation filter to the control command right before its published. Primarily for safety, this filter restricts the output range of all control commands published through Autoware.</p>
 <p>The limitation values are calculated based on the 1D interpolation of the limitation array parameters. Here is an example for the longitudinal jerk limit.</p>
 <p><img alt="filter-example" src="image/filter.png"></p>
@@ -13987,7 +14115,12 @@ This feature requires a <code>~/input/external_emergency_stop_heartbeat</code> t
 The <code>check_external_emergency_heartbeat</code> parameter must be false when the "external emergency stop" function is not used.</p>
 <h3 id="commands-on-mode-changes">Commands on Mode changes<a class="headerlink" href="#commands-on-mode-changes" title="Permanent link">#</a></h3>
 <p>Output commands' topics: <code>turn_indicators_cmd</code>, <code>hazard_light</code> and <code>gear_cmd</code> are selected based on <code>gate_mode</code>.
-However, to ensure the continuity of commands, these commands will not change until the topics of new input commands arrive, even if a mode change occurs.</p></div>
+However, to ensure the continuity of commands, these commands will not change until the topics of new input commands arrive, even if a mode change occurs.</p>
+<h2 id="caution">Caution<a class="headerlink" href="#caution" title="Permanent link">#</a></h2>
+<ul>
+<li>This node depends on the Operation Mode Transition Manager for Engage state transitions at the design level.</li>
+<li>Tests are essential and must be retained.</li>
+</ul></div>
 
 
 
