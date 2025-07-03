@@ -8550,6 +8550,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_8_6_5_2" id="__nav_8_6_5_2_label" tabindex="0">
@@ -8642,6 +8644,20 @@
     <li class="md-nav__item">
       <a href="../autoware_motion_velocity_obstacle_velocity_limiter_module/" class="md-nav__link">
         Obstacle Velocity Limiter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./" class="md-nav__link">
+        Run Out
       </a>
     </li>
   
@@ -9047,10 +9063,66 @@
   
   
   
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8_10_5" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_10_5" id="__nav_8_10_5_label" tabindex="0">
+          Planning Validator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_8_10_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8_10_5">
+          <span class="md-nav__icon md-icon"></span>
+          Planning Validator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
     <li class="md-nav__item">
-      <a href="../../autoware_planning_validator" class="md-nav__link">
-        Planning Validator
+      <a href="../../planning_validator/autoware_planning_validator" class="md-nav__link">
+        About Planning Validator
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../planning_validator/autoware_planning_validator_intersection_collision_checker" class="md-nav__link">
+        Intersection Collision Checker
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -13781,6 +13853,10 @@ we prepare the following sets of geometries based on the parameters defined for 
 <li>the rear segment of the current ego footprint is also added if <code>cut_predicted_paths.if_crossing_ego_from_behind</code> is set to <code>true</code>.</li>
 </ul>
 </li>
+<li>segments to strictly cut predicted paths (<code>cut_predicted_paths.strict_polygon_types</code>, <code>cut_predicted_paths.strict_linestring_types</code>, and <code>cut_predicted_paths.strict_lanelet_subtypes</code>).<ul>
+<li>strict cutting means that the cut is always applied, regardless of any preserved distance or duration.</li>
+</ul>
+</li>
 </ul>
 <p>The following figure shows an example where the polygons to ignore objects are shown in blue, to ignore collisions in green, and to cut predicted paths in red.</p>
 <p><img alt="map_filtering_data" src="docs/map_filtering_data.png"></p>
@@ -13801,7 +13877,8 @@ First, we only keep predicted paths that have a confidence value above the <code
 If, <code>confidence_filtering.only_use_highest</code> is set to <code>true</code> then for each object only the predicted paths that have the higher confidence value are kept.
 Next, the remaining predicted paths are cut according to the segments prepared in the previous step.</p>
 <p>To guarantee that parts of the predicted paths are never ignored,
-parameters <code>preserved_duration</code> and <code>preserved_distance</code> can be used to set a minimum duration and/or distance that cannot be cut or ignored.</p>
+parameters <code>preserved_duration</code> and <code>preserved_distance</code> can be used to set a minimum duration and/or distance that cannot be cut or ignored.
+This is not applied in the case of the strict cutting.</p>
 <p>The following figures shows an example where crosswalks are used to ignore pedestrians and to cut their predicted paths.</p>
 <table>
 <thead>
