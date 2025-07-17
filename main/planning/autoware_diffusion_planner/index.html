@@ -8,20 +8,20 @@
       
       
       
-        <link rel="canonical" href="https://autowarefoundation.github.io/autoware_universe/main/planning/autoware_surround_obstacle_checker/">
+        <link rel="canonical" href="https://autowarefoundation.github.io/autoware_universe/main/planning/autoware_diffusion_planner/">
       
       
-        <link rel="prev" href="../autoware_scenario_selector/">
+        <link rel="prev" href="../autoware_costmap_generator/">
       
       
-        <link rel="next" href="surround_obstacle_checker-design.ja/">
+        <link rel="next" href="../autoware_external_velocity_limit_selector/">
       
       <link rel="icon" href="../../docs/assets/images/autoware-foundation.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.20">
     
     
       
-        <title>Surround Obstacle Checker - Autoware Universe Documentation</title>
+        <title>Autoware Diffusion Planner - Autoware Universe Documentation</title>
       
     
     
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#surround-obstacle-checker" class="md-skip">
+        <a href="#autoware-diffusion-planner" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Surround Obstacle Checker
+              Autoware Diffusion Planner
             
           </span>
         </div>
@@ -8543,7 +8543,7 @@
   
   
     <li class="md-nav__item">
-      <a href="." class="md-nav__link">
+      <a href="../autoware_surround_obstacle_checker" class="md-nav__link">
         About Surround Obstacle Checker
       </a>
     </li>
@@ -8557,7 +8557,7 @@
   
   
     <li class="md-nav__item">
-      <a href="surround_obstacle_checker-design.ja" class="md-nav__link">
+      <a href="../autoware_surround_obstacle_checker/surround_obstacle_checker-design.ja" class="md-nav__link">
         About Surround Obstacle Checker (Japanese)
       </a>
     </li>
@@ -13822,91 +13822,16 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#purpose" class="md-nav__link">
-    Purpose
+  <a href="#overview" class="md-nav__link">
+    Overview
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#inner-workings-algorithms" class="md-nav__link">
-    Inner-workings / Algorithms
+  <a href="#features" class="md-nav__link">
+    Features
   </a>
-  
-    <nav class="md-nav" aria-label="Inner-workings / Algorithms">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#flow-chart" class="md-nav__link">
-    Flow chart
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#algorithms" class="md-nav__link">
-    Algorithms
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#check-data" class="md-nav__link">
-    Check data
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get-distance-to-nearest-object" class="md-nav__link">
-    Get distance to nearest object
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#stop-requirement" class="md-nav__link">
-    Stop requirement
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#states" class="md-nav__link">
-    States
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inputs-outputs" class="md-nav__link">
-    Inputs / Outputs
-  </a>
-  
-    <nav class="md-nav" aria-label="Inputs / Outputs">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#input" class="md-nav__link">
-    Input
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#output" class="md-nav__link">
-    Output
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -13918,8 +13843,50 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#assumptions-known-limits" class="md-nav__link">
-    Assumptions / Known limits
+  <a href="#inputs" class="md-nav__link">
+    Inputs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outputs" class="md-nav__link">
+    Outputs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    Testing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    ❗ Limitations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#development-contribution" class="md-nav__link">
+    Development &amp; Contribution
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    License
   </a>
   
 </li>
@@ -13942,128 +13909,50 @@
   
 
 
-<div><h1 id="surround-obstacle-checker">Surround Obstacle Checker<a class="headerlink" href="#surround-obstacle-checker" title="Permanent link">#</a></h1>
-<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
-<p>This module subscribes required data (ego-pose, obstacles, etc), and publishes zero velocity limit to keep stopping if any of stop conditions are satisfied.</p>
-<h2 id="inner-workings-algorithms">Inner-workings / Algorithms<a class="headerlink" href="#inner-workings-algorithms" title="Permanent link">#</a></h2>
-<h3 id="flow-chart">Flow chart<a class="headerlink" href="#flow-chart" title="Permanent link">#</a></h3>
-<p><img src="data:image/svg+xml;base64,PCFET0NUWVBFIGh0bWw+CjwhLS1baWYgbHQgSUUgN10+IDxodG1sIGNsYXNzPSJuby1qcyBpZTYgb2xkaWUiIGxhbmc9ImVuLVVTIj4gPCFbZW5kaWZdLS0+CjwhLS1baWYgSUUgN10+ICAgIDxodG1sIGNsYXNzPSJuby1qcyBpZTcgb2xkaWUiIGxhbmc9ImVuLVVTIj4gPCFbZW5kaWZdLS0+CjwhLS1baWYgSUUgOF0+ICAgIDxodG1sIGNsYXNzPSJuby1qcyBpZTggb2xkaWUiIGxhbmc9ImVuLVVTIj4gPCFbZW5kaWZdLS0+CjwhLS1baWYgZ3QgSUUgOF0+PCEtLT4gPGh0bWwgY2xhc3M9Im5vLWpzIiBsYW5nPSJlbi1VUyI+IDwhLS08IVtlbmRpZl0tLT4KPGhlYWQ+Cgo8dGl0bGU+cGxhbnR1bWwuY29tIHwgNTIwOiBXZWIgc2VydmVyIGlzIHJldHVybmluZyBhbiB1bmtub3duIGVycm9yPC90aXRsZT4KPG1ldGEgY2hhcnNldD0iVVRGLTgiIC8+CjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIgY29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PVVURi04IiAvPgo8bWV0YSBodHRwLWVxdWl2PSJYLVVBLUNvbXBhdGlibGUiIGNvbnRlbnQ9IklFPUVkZ2UiIC8+CjxtZXRhIG5hbWU9InJvYm90cyIgY29udGVudD0ibm9pbmRleCwgbm9mb2xsb3ciIC8+CjxtZXRhIG5hbWU9InZpZXdwb3J0IiBjb250ZW50PSJ3aWR0aD1kZXZpY2Utd2lkdGgsaW5pdGlhbC1zY2FsZT0xIiAvPgo8bGluayByZWw9InN0eWxlc2hlZXQiIGlkPSJjZl9zdHlsZXMtY3NzIiBocmVmPSIvY2RuLWNnaS9zdHlsZXMvbWFpbi5jc3MiIC8+CjwvaGVhZD4KPGJvZHk+CjxkaXYgaWQ9ImNmLXdyYXBwZXIiPgogICAgPGRpdiBpZD0iY2YtZXJyb3ItZGV0YWlscyIgY2xhc3M9InAtMCI+CiAgICAgICAgPGhlYWRlciBjbGFzcz0ibXgtYXV0byBwdC0xMCBsZzpwdC02IGxnOnB4LTggdy0yNDAgbGc6dy1mdWxsIG1iLTgiPgogICAgICAgICAgICA8aDEgY2xhc3M9ImlubGluZS1ibG9jayBzbTpibG9jayBzbTptYi0yIGZvbnQtbGlnaHQgdGV4dC02MCBsZzp0ZXh0LTR4bCB0ZXh0LWJsYWNrLWRhcmsgbGVhZGluZy10aWdodCBtci0yIj4KICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzPSJpbmxpbmUtYmxvY2siPldlYiBzZXJ2ZXIgaXMgcmV0dXJuaW5nIGFuIHVua25vd24gZXJyb3I8L3NwYW4+CiAgICAgICAgICAgICAgICA8c3BhbiBjbGFzcz0iY29kZS1sYWJlbCI+RXJyb3IgY29kZSA1MjA8L3NwYW4+CiAgICAgICAgICAgIDwvaDE+CiAgICAgICAgICAgIDxkaXY+CiAgICAgICAgICAgICAgICBWaXNpdCA8YSBocmVmPSJodHRwczovL3d3dy5jbG91ZGZsYXJlLmNvbS81eHgtZXJyb3ItbGFuZGluZz91dG1fc291cmNlPWVycm9yY29kZV81MjAmdXRtX2NhbXBhaWduPXd3dy5wbGFudHVtbC5jb20iIHRhcmdldD0iX2JsYW5rIiByZWw9Im5vb3BlbmVyIG5vcmVmZXJyZXIiPmNsb3VkZmxhcmUuY29tPC9hPiBmb3IgbW9yZSBpbmZvcm1hdGlvbi4KICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9Im10LTMiPjIwMjUtMDctMTcgMDk6MTc6MDUgVVRDPC9kaXY+CiAgICAgICAgPC9oZWFkZXI+CiAgICAgICAgPGRpdiBjbGFzcz0ibXktOCBiZy1ncmFkaWVudC1ncmF5Ij4KICAgICAgICAgICAgPGRpdiBjbGFzcz0idy0yNDAgbGc6dy1mdWxsIG14LWF1dG8iPgogICAgICAgICAgICAgICAgPGRpdiBjbGFzcz0iY2xlYXJmaXggbWQ6cHgtOCI+CiAgICAgICAgICAgICAgICAgICAgPGRpdiBpZD0iY2YtYnJvd3Nlci1zdGF0dXMiIGNsYXNzPSIgcmVsYXRpdmUgdy0xLzMgbWQ6dy1mdWxsIHB5LTE1IG1kOnAtMCBtZDpweS04IG1kOnRleHQtbGVmdCBtZDpib3JkZXItc29saWQgbWQ6Ym9yZGVyLTAgbWQ6Ym9yZGVyLWIgbWQ6Ym9yZGVyLWdyYXktNDAwIG92ZXJmbG93LWhpZGRlbiBmbG9hdC1sZWZ0IG1kOmZsb2F0LW5vbmUgdGV4dC1jZW50ZXIiPgogIDxkaXYgY2xhc3M9InJlbGF0aXZlIG1iLTEwIG1kOm0tMCI+CiAgICAKICAgIDxzcGFuIGNsYXNzPSJjZi1pY29uLWJyb3dzZXIgYmxvY2sgbWQ6aGlkZGVuIGgtMjAgYmctY2VudGVyIGJnLW5vLXJlcGVhdCI+PC9zcGFuPgogICAgPHNwYW4gY2xhc3M9ImNmLWljb24tb2sgdy0xMiBoLTEyIGFic29sdXRlIGxlZnQtMS8yIG1kOmxlZnQtYXV0byBtZDpyaWdodC0wIG1kOnRvcC0wIC1tbC02IC1ib3R0b20tNCI+PC9zcGFuPgogICAgCiAgPC9kaXY+CiAgPHNwYW4gY2xhc3M9Im1kOmJsb2NrIHctZnVsbCB0cnVuY2F0ZSI+WW91PC9zcGFuPgogIDxoMyBjbGFzcz0ibWQ6aW5saW5lLWJsb2NrIG10LTMgbWQ6bXQtMCB0ZXh0LTJ4bCB0ZXh0LWdyYXktNjAwIGZvbnQtbGlnaHQgbGVhZGluZy0xLjMiPgogIAogICAgQnJvd3NlcgogIAogIDwvaDM+CiAgCiAgPHNwYW4gY2xhc3M9ImxlYWRpbmctMS4zIHRleHQtMnhsIHRleHQtZ3JlZW4tc3VjY2VzcyI+V29ya2luZzwvc3Bhbj4KICAKPC9kaXY+CiAgICAgICAgICAgICAgICAgICAgPGRpdiBpZD0iY2YtY2xvdWRmbGFyZS1zdGF0dXMiIGNsYXNzPSIgcmVsYXRpdmUgdy0xLzMgbWQ6dy1mdWxsIHB5LTE1IG1kOnAtMCBtZDpweS04IG1kOnRleHQtbGVmdCBtZDpib3JkZXItc29saWQgbWQ6Ym9yZGVyLTAgbWQ6Ym9yZGVyLWIgbWQ6Ym9yZGVyLWdyYXktNDAwIG92ZXJmbG93LWhpZGRlbiBmbG9hdC1sZWZ0IG1kOmZsb2F0LW5vbmUgdGV4dC1jZW50ZXIiPgogIDxkaXYgY2xhc3M9InJlbGF0aXZlIG1iLTEwIG1kOm0tMCI+CiAgICA8YSBocmVmPSJodHRwczovL3d3dy5jbG91ZGZsYXJlLmNvbS81eHgtZXJyb3ItbGFuZGluZz91dG1fc291cmNlPWVycm9yY29kZV81MjAmIzM4O3V0bV9jYW1wYWlnbj13d3cucGxhbnR1bWwuY29tIiB0YXJnZXQ9Il9ibGFuayIgcmVsPSJub29wZW5lciBub3JlZmVycmVyIj4KICAgIDxzcGFuIGNsYXNzPSJjZi1pY29uLWNsb3VkIGJsb2NrIG1kOmhpZGRlbiBoLTIwIGJnLWNlbnRlciBiZy1uby1yZXBlYXQiPjwvc3Bhbj4KICAgIDxzcGFuIGNsYXNzPSJjZi1pY29uLW9rIHctMTIgaC0xMiBhYnNvbHV0ZSBsZWZ0LTEvMiBtZDpsZWZ0LWF1dG8gbWQ6cmlnaHQtMCBtZDp0b3AtMCAtbWwtNiAtYm90dG9tLTQiPjwvc3Bhbj4KICAgIDwvYT4KICA8L2Rpdj4KICA8c3BhbiBjbGFzcz0ibWQ6YmxvY2sgdy1mdWxsIHRydW5jYXRlIj5EYWxsYXM8L3NwYW4+CiAgPGgzIGNsYXNzPSJtZDppbmxpbmUtYmxvY2sgbXQtMyBtZDptdC0wIHRleHQtMnhsIHRleHQtZ3JheS02MDAgZm9udC1saWdodCBsZWFkaW5nLTEuMyI+CiAgPGEgaHJlZj0iaHR0cHM6Ly93d3cuY2xvdWRmbGFyZS5jb20vNXh4LWVycm9yLWxhbmRpbmc/dXRtX3NvdXJjZT1lcnJvcmNvZGVfNTIwJnV0bV9jYW1wYWlnbj13d3cucGxhbnR1bWwuY29tIiB0YXJnZXQ9Il9ibGFuayIgcmVsPSJub29wZW5lciBub3JlZmVycmVyIj4KICAgIENsb3VkZmxhcmUKICA8L2E+CiAgPC9oMz4KICAKICA8c3BhbiBjbGFzcz0ibGVhZGluZy0xLjMgdGV4dC0yeGwgdGV4dC1ncmVlbi1zdWNjZXNzIj5Xb3JraW5nPC9zcGFuPgogIAo8L2Rpdj4KICAgICAgICAgICAgICAgICAgICA8ZGl2IGlkPSJjZi1ob3N0LXN0YXR1cyIgY2xhc3M9ImNmLWVycm9yLXNvdXJjZSByZWxhdGl2ZSB3LTEvMyBtZDp3LWZ1bGwgcHktMTUgbWQ6cC0wIG1kOnB5LTggbWQ6dGV4dC1sZWZ0IG1kOmJvcmRlci1zb2xpZCBtZDpib3JkZXItMCBtZDpib3JkZXItYiBtZDpib3JkZXItZ3JheS00MDAgb3ZlcmZsb3ctaGlkZGVuIGZsb2F0LWxlZnQgbWQ6ZmxvYXQtbm9uZSB0ZXh0LWNlbnRlciI+CiAgPGRpdiBjbGFzcz0icmVsYXRpdmUgbWItMTAgbWQ6bS0wIj4KICAgIAogICAgPHNwYW4gY2xhc3M9ImNmLWljb24tc2VydmVyIGJsb2NrIG1kOmhpZGRlbiBoLTIwIGJnLWNlbnRlciBiZy1uby1yZXBlYXQiPjwvc3Bhbj4KICAgIDxzcGFuIGNsYXNzPSJjZi1pY29uLWVycm9yIHctMTIgaC0xMiBhYnNvbHV0ZSBsZWZ0LTEvMiBtZDpsZWZ0LWF1dG8gbWQ6cmlnaHQtMCBtZDp0b3AtMCAtbWwtNiAtYm90dG9tLTQiPjwvc3Bhbj4KICAgIAogIDwvZGl2PgogIDxzcGFuIGNsYXNzPSJtZDpibG9jayB3LWZ1bGwgdHJ1bmNhdGUiPnd3dy5wbGFudHVtbC5jb208L3NwYW4+CiAgPGgzIGNsYXNzPSJtZDppbmxpbmUtYmxvY2sgbXQtMyBtZDptdC0wIHRleHQtMnhsIHRleHQtZ3JheS02MDAgZm9udC1saWdodCBsZWFkaW5nLTEuMyI+CiAgCiAgICBIb3N0CiAgCiAgPC9oMz4KICAKICA8c3BhbiBjbGFzcz0ibGVhZGluZy0xLjMgdGV4dC0yeGwgdGV4dC1yZWQtZXJyb3IiPkVycm9yPC9zcGFuPgogIAo8L2Rpdj4KICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L2Rpdj4KCiAgICAgICAgPGRpdiBjbGFzcz0idy0yNDAgbGc6dy1mdWxsIG14LWF1dG8gbWItOCBsZzpweC04Ij4KICAgICAgICAgICAgPGRpdiBjbGFzcz0iY2xlYXJmaXgiPgogICAgICAgICAgICAgICAgPGRpdiBjbGFzcz0idy0xLzIgbWQ6dy1mdWxsIGZsb2F0LWxlZnQgcHItNiBtZDpwYi0xMCBtZDpwci0wIGxlYWRpbmctcmVsYXhlZCI+CiAgICAgICAgICAgICAgICAgICAgPGgyIGNsYXNzPSJ0ZXh0LTN4bCBmb250LW5vcm1hbCBsZWFkaW5nLTEuMyBtYi00Ij5XaGF0IGhhcHBlbmVkPzwvaDI+CiAgICAgICAgICAgICAgICAgICAgPHA+VGhlcmUgaXMgYW4gdW5rbm93biBjb25uZWN0aW9uIGlzc3VlIGJldHdlZW4gQ2xvdWRmbGFyZSBhbmQgdGhlIG9yaWdpbiB3ZWIgc2VydmVyLiBBcyBhIHJlc3VsdCwgdGhlIHdlYiBwYWdlIGNhbiBub3QgYmUgZGlzcGxheWVkLjwvcD4KICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgICAgPGRpdiBjbGFzcz0idy0xLzIgbWQ6dy1mdWxsIGZsb2F0LWxlZnQgbGVhZGluZy1yZWxheGVkIj4KICAgICAgICAgICAgICAgICAgICA8aDIgY2xhc3M9InRleHQtM3hsIGZvbnQtbm9ybWFsIGxlYWRpbmctMS4zIG1iLTQiPldoYXQgY2FuIEkgZG8/PC9oMj4KICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgIDxoMyBjbGFzcz0idGV4dC0xNSBmb250LXNlbWlib2xkIG1iLTIiPklmIHlvdSBhcmUgYSB2aXNpdG9yIG9mIHRoaXMgd2Vic2l0ZTo8L2gzPgogICAgICAgICAgICAgICAgPHAgY2xhc3M9Im1iLTYiPlBsZWFzZSB0cnkgYWdhaW4gaW4gYSBmZXcgbWludXRlcy48L3A+CgogICAgICAgICAgICAgICAgPGgzIGNsYXNzPSJ0ZXh0LTE1IGZvbnQtc2VtaWJvbGQgbWItMiI+SWYgeW91IGFyZSB0aGUgb3duZXIgb2YgdGhpcyB3ZWJzaXRlOjwvaDM+CiAgICAgICAgICAgICAgICA8cD48c3Bhbj5UaGVyZSBpcyBhbiBpc3N1ZSBiZXR3ZWVuIENsb3VkZmxhcmUncyBjYWNoZSBhbmQgeW91ciBvcmlnaW4gd2ViIHNlcnZlci4gQ2xvdWRmbGFyZSBtb25pdG9ycyBmb3IgdGhlc2UgZXJyb3JzIGFuZCBhdXRvbWF0aWNhbGx5IGludmVzdGlnYXRlcyB0aGUgY2F1c2UuIFRvIGhlbHAgc3VwcG9ydCB0aGUgaW52ZXN0aWdhdGlvbiwgeW91IGNhbiBwdWxsIHRoZSBjb3JyZXNwb25kaW5nIGVycm9yIGxvZyBmcm9tIHlvdXIgd2ViIHNlcnZlciBhbmQgc3VibWl0IGl0IG91ciBzdXBwb3J0IHRlYW0uICBQbGVhc2UgaW5jbHVkZSB0aGUgUmF5IElEICh3aGljaCBpcyBhdCB0aGUgYm90dG9tIG9mIHRoaXMgZXJyb3IgcGFnZSkuPC9zcGFuPiA8YSByZWw9Im5vb3BlbmVyIG5vcmVmZXJyZXIiIGhyZWY9ICAgImh0dHBzOi8vZGV2ZWxvcGVycy5jbG91ZGZsYXJlLmNvbS9zdXBwb3J0L3Ryb3VibGVzaG9vdGluZy9odHRwLXN0YXR1cy1jb2Rlcy9jbG91ZGZsYXJlLTV4eC1lcnJvcnMvZXJyb3ItNTIwLyI+QWRkaXRpb25hbCB0cm91Ymxlc2hvb3RpbmcgcmVzb3VyY2VzPC9hPi48L3A+CiAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgPC9kaXY+CgogICAgICAgIDxkaXYgY2xhc3M9ImNmLWVycm9yLWZvb3RlciBjZi13cmFwcGVyIHctMjQwIGxnOnctZnVsbCBweS0xMCBzbTpweS00IHNtOnB4LTggbXgtYXV0byB0ZXh0LWNlbnRlciBzbTp0ZXh0LWxlZnQgYm9yZGVyLXNvbGlkIGJvcmRlci0wIGJvcmRlci10IGJvcmRlci1ncmF5LTMwMCI+CiAgICA8cCBjbGFzcz0idGV4dC0xMyI+CiAgICAgIDxzcGFuIGNsYXNzPSJjZi1mb290ZXItaXRlbSBzbTpibG9jayBzbTptYi0xIj5DbG91ZGZsYXJlIFJheSBJRDogPHN0cm9uZyBjbGFzcz0iZm9udC1zZW1pYm9sZCI+OTYwOGE0ZDhhZTViNjZjNTwvc3Ryb25nPjwvc3Bhbj4KICAgICAgPHNwYW4gY2xhc3M9ImNmLWZvb3Rlci1zZXBhcmF0b3Igc206aGlkZGVuIj4mYnVsbDs8L3NwYW4+CiAgICAgIDxzcGFuIGlkPSJjZi1mb290ZXItaXRlbS1pcCIgY2xhc3M9ImNmLWZvb3Rlci1pdGVtIGhpZGRlbiBzbTpibG9jayBzbTptYi0xIj4KICAgICAgICBZb3VyIElQOgogICAgICAgIDxidXR0b24gdHlwZT0iYnV0dG9uIiBpZD0iY2YtZm9vdGVyLWlwLXJldmVhbCIgY2xhc3M9ImNmLWZvb3Rlci1pcC1yZXZlYWwtYnRuIj5DbGljayB0byByZXZlYWw8L2J1dHRvbj4KICAgICAgICA8c3BhbiBjbGFzcz0iaGlkZGVuIiBpZD0iY2YtZm9vdGVyLWlwIj41Mi4xNzMuMTYzLjEzMDwvc3Bhbj4KICAgICAgICA8c3BhbiBjbGFzcz0iY2YtZm9vdGVyLXNlcGFyYXRvciBzbTpoaWRkZW4iPiZidWxsOzwvc3Bhbj4KICAgICAgPC9zcGFuPgogICAgICA8c3BhbiBjbGFzcz0iY2YtZm9vdGVyLWl0ZW0gc206YmxvY2sgc206bWItMSI+PHNwYW4+UGVyZm9ybWFuY2UgJmFtcDsgc2VjdXJpdHkgYnk8L3NwYW4+IDxhIHJlbD0ibm9vcGVuZXIgbm9yZWZlcnJlciIgaHJlZj0iaHR0cHM6Ly93d3cuY2xvdWRmbGFyZS5jb20vNXh4LWVycm9yLWxhbmRpbmc/dXRtX3NvdXJjZT1lcnJvcmNvZGVfNTIwJiMzODt1dG1fY2FtcGFpZ249d3d3LnBsYW50dW1sLmNvbSIgaWQ9ImJyYW5kX2xpbmsiIHRhcmdldD0iX2JsYW5rIj5DbG91ZGZsYXJlPC9hPjwvc3Bhbj4KICAgICAgCiAgICA8L3A+CiAgICA8c2NyaXB0PihmdW5jdGlvbigpe2Z1bmN0aW9uIGQoKXt2YXIgYj1hLmdldEVsZW1lbnRCeUlkKCJjZi1mb290ZXItaXRlbS1pcCIpLGM9YS5nZXRFbGVtZW50QnlJZCgiY2YtZm9vdGVyLWlwLXJldmVhbCIpO2ImJiJjbGFzc0xpc3QiaW4gYiYmKGIuY2xhc3NMaXN0LnJlbW92ZSgiaGlkZGVuIiksYy5hZGRFdmVudExpc3RlbmVyKCJjbGljayIsZnVuY3Rpb24oKXtjLmNsYXNzTGlzdC5hZGQoImhpZGRlbiIpO2EuZ2V0RWxlbWVudEJ5SWQoImNmLWZvb3Rlci1pcCIpLmNsYXNzTGlzdC5yZW1vdmUoImhpZGRlbiIpfSkpfXZhciBhPWRvY3VtZW50O2RvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXImJmEuYWRkRXZlbnRMaXN0ZW5lcigiRE9NQ29udGVudExvYWRlZCIsZCl9KSgpOzwvc2NyaXB0PgogIDwvZGl2PjwhLS0gLy5lcnJvci1mb290ZXIgLS0+CgogICAgPC9kaXY+CjwvZGl2Pgo8L2JvZHk+CjwvaHRtbD4=" class="uml" alt="uml diagram" title=""></p>
-<div align="center">
-  <img src="./media/check_distance.drawio.svg" width="80%">
-</div>
-
-<h3 id="algorithms">Algorithms<a class="headerlink" href="#algorithms" title="Permanent link">#</a></h3>
-<h3 id="check-data">Check data<a class="headerlink" href="#check-data" title="Permanent link">#</a></h3>
-<p>Check that <code>surround_obstacle_checker</code> receives no ground pointcloud, dynamic objects and current velocity data.</p>
-<h3 id="get-distance-to-nearest-object">Get distance to nearest object<a class="headerlink" href="#get-distance-to-nearest-object" title="Permanent link">#</a></h3>
-<p>Calculate distance between ego vehicle and the nearest object.
-In this function, it calculates the minimum distance between the polygon of ego vehicle and all points in pointclouds and the polygons of dynamic objects.</p>
-<h3 id="stop-requirement">Stop requirement<a class="headerlink" href="#stop-requirement" title="Permanent link">#</a></h3>
-<p>If it satisfies all following conditions, it plans stopping.</p>
+<div><h1 id="autoware-diffusion-planner">Autoware Diffusion Planner<a class="headerlink" href="#autoware-diffusion-planner" title="Permanent link">#</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">#</a></h2>
+<p>The <strong>Autoware Diffusion Planner</strong> is a trajectory generation module for autonomous vehicles, designed to work within the <a href="https://autoware.org/">Autoware</a> ecosystem. It leverages the <a href="https://github.com/ZhengYinan-AIR/Diffusion-Planner">Diffusion Planner</a> model, as described in the paper <a href="https://arxiv.org/abs/2501.15564">"Diffusion-Based Planning for Autonomous Driving with Flexible Guidance"</a> by Zheng et al. <!-- cSpell:ignore Zheng --></p>
+<p>This planner generates smooth, feasible, and safe trajectories by considering:</p>
 <ul>
-<li>Ego vehicle is stopped</li>
-<li>It satisfies any following conditions<ol>
-<li>The distance to nearest obstacle satisfies following conditions<ul>
-<li>If state is <code>State::PASS</code>, the distance is less than <code>surround_check_distance</code></li>
-<li>If state is <code>State::STOP</code>, the distance is less than <code>surround_check_recover_distance</code></li>
+<li>Dynamic and static obstacles</li>
+<li>Vehicle kinematics</li>
+<li>User-defined constraints</li>
+<li>Lanelet2 map context</li>
+<li>Traffic signals and speed limits</li>
 </ul>
-</li>
-<li>If it does not satisfies the condition in 1, elapsed time from the time it satisfies the condition in 1 is less than <code>state_clear_time</code></li>
-</ol>
+<p>It is implemented as a ROS 2 component node, making it easy to integrate into Autoware-based stacks. The node is aimed at working within the proposed <a href="https://github.com/tier4/new_planning_framework">Autoware new planning framework</a>.</p>
+<hr>
+<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">#</a></h2>
+<ul>
+<li>
+<p><strong>Diffusion-based trajectory generation</strong> for flexible and robust planning</p>
+<p><a href="media/diffusion_planner.gif"><img alt="Diffusion-Based trajectory generation" src="media/diffusion_planner.gif"></a></p>
 </li>
 </ul>
-<h3 id="states">States<a class="headerlink" href="#states" title="Permanent link">#</a></h3>
-<p>To prevent chattering, <code>surround_obstacle_checker</code> manages two states.
-As mentioned in stop condition section, it prevents chattering by changing threshold to find surround obstacle depending on the states.</p>
 <ul>
-<li><code>State::PASS</code> : Stop planning is released</li>
-<li><code>State::STOP</code> ：While stop planning</li>
+<li>
+<p><strong>Integration with Lanelet2 maps</strong> for lane-level context</p>
+<p><a href="media/lanelet_map_integration.png"><img alt="Lanelet Map Integration" src="media/lanelet_map_integration.png"></a></p>
+</li>
 </ul>
-<h2 id="inputs-outputs">Inputs / Outputs<a class="headerlink" href="#inputs-outputs" title="Permanent link">#</a></h2>
-<h3 id="input">Input<a class="headerlink" href="#input" title="Permanent link">#</a></h3>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>/perception/obstacle_segmentation/pointcloud</code></td>
-<td><code>sensor_msgs::msg::PointCloud2</code></td>
-<td>Pointcloud of obstacles which the ego-vehicle should stop or avoid</td>
-</tr>
-<tr>
-<td><code>/perception/object_recognition/objects</code></td>
-<td><code>autoware_perception_msgs::msg::PredictedObjects</code></td>
-<td>Dynamic objects</td>
-</tr>
-<tr>
-<td><code>/localization/kinematic_state</code></td>
-<td><code>nav_msgs::msg::Odometry</code></td>
-<td>Current twist</td>
-</tr>
-<tr>
-<td><code>/tf</code></td>
-<td><code>tf2_msgs::msg::TFMessage</code></td>
-<td>TF</td>
-</tr>
-<tr>
-<td><code>/tf_static</code></td>
-<td><code>tf2_msgs::msg::TFMessage</code></td>
-<td>TF static</td>
-</tr>
-</tbody>
-</table>
-<h3 id="output">Output<a class="headerlink" href="#output" title="Permanent link">#</a></h3>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>~/output/velocity_limit_clear_command</code></td>
-<td><code>autoware_internal_planning_msgs::msg::VelocityLimitClearCommand</code></td>
-<td>Velocity limit clear command</td>
-</tr>
-<tr>
-<td><code>~/output/max_velocity</code></td>
-<td><code>autoware_internal_planning_msgs::msg::VelocityLimit</code></td>
-<td>Velocity limit command</td>
-</tr>
-<tr>
-<td><code>~/output/no_start_reason</code></td>
-<td><code>diagnostic_msgs::msg::DiagnosticStatus</code></td>
-<td>No start reason</td>
-</tr>
-<tr>
-<td><code>~/debug/marker</code></td>
-<td><code>visualization_msgs::msg::MarkerArray</code></td>
-<td>Marker for visualization</td>
-</tr>
-<tr>
-<td><code>~/debug/footprint</code></td>
-<td><code>geometry_msgs::msg::PolygonStamped</code></td>
-<td>Ego vehicle base footprint for visualization</td>
-</tr>
-<tr>
-<td><code>~/debug/footprint_offset</code></td>
-<td><code>geometry_msgs::msg::PolygonStamped</code></td>
-<td>Ego vehicle footprint with <code>surround_check_distance</code> offset for visualization</td>
-</tr>
-<tr>
-<td><code>~/debug/footprint_recover_offset</code></td>
-<td><code>geometry_msgs::msg::PolygonStamped</code></td>
-<td>Ego vehicle footprint with <code>surround_check_recover_distance</code> offset for visualization</td>
-</tr>
-</tbody>
-</table>
+<ul>
+<li>
+<p><strong>Dynamic and static obstacle handling</strong> using perception inputs</p>
+<p><a href="media/diffusion_planner_reacts_to_bus.gif"><img alt="Static Agent Reaction" src="media/diffusion_planner_reacts_to_bus.gif"></a></p>
+<p><a href="media/reaction_to_other_agents.gif"><img alt="Diffusion Planner" src="media/reaction_to_other_agents.gif"></a></p>
+</li>
+</ul>
+<ul>
+<li>
+<p><strong>Traffic signal and speed limit awareness</strong></p>
+<p><a href="media/traffic_light_support.gif"><img alt="Traffic Light Support" src="media/traffic_light_support.gif"></a></p>
+</li>
+</ul>
+<ul>
+<li><strong>ONNX Runtime</strong> inference for fast neural network execution</li>
+<li><strong>ROS 2 publishers</strong> for planned trajectories, predicted objects, and debug markers</li>
+</ul>
+<hr>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">#</a></h2>
 <table>
 <thead>
@@ -14077,363 +13966,224 @@ As mentioned in stop condition section, it prevents chattering by changing thres
 </thead>
 <tbody>
 <tr>
-<td>pointcloud.enable_check</td>
-<td>boolean</td>
-<td>enable to check surrounding pointcloud</td>
-<td>false</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>pointcloud.surround_check_front_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>pointcloud.surround_check_side_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>pointcloud.surround_check_back_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>unknown.enable_check</td>
-<td>boolean</td>
-<td>enable to check surrounding unknown objects</td>
-<td>true</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>unknown.surround_check_front_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>unknown.surround_check_side_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>unknown.surround_check_back_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>car.enable_check</td>
-<td>boolean</td>
-<td>enable to check surrounding car</td>
-<td>true</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>car.surround_check_front_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>car.surround_check_side_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>car.surround_check_back_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>truck.enable_check</td>
-<td>boolean</td>
-<td>enable to check surrounding truck</td>
-<td>true</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>truck.surround_check_front_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>truck.surround_check_side_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>truck.surround_check_back_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>bus.enable_check</td>
-<td>boolean</td>
-<td>enable to check surrounding bus</td>
-<td>true</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>bus.surround_check_front_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>bus.surround_check_side_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>bus.surround_check_back_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>trailer.enable_check</td>
-<td>boolean</td>
-<td>enable to check surrounding trailer</td>
-<td>true</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>trailer.surround_check_front_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>trailer.surround_check_side_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>trailer.surround_check_back_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>motorcycle.enable_check</td>
-<td>boolean</td>
-<td>enable to check surrounding motorcycle</td>
-<td>true</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>motorcycle.surround_check_front_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>motorcycle.surround_check_side_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>motorcycle.surround_check_back_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>bicycle.enable_check</td>
-<td>boolean</td>
-<td>enable to check surrounding bicycle</td>
-<td>true</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>bicycle.surround_check_front_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>bicycle.surround_check_side_distance</td>
-<td>float</td>
-<td>f objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>bicycle.surround_check_back_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>pedestrian.enable_check</td>
-<td>boolean</td>
-<td>enable to check surrounding pedestrian</td>
-<td>true</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>pedestrian.surround_check_front_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>pedestrian.surround_check_side_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>pedestrian.surround_check_back_distance</td>
-<td>float</td>
-<td>If objects exist in this distance, transit to "exist-surrounding-obstacle" status. [m]</td>
-<td>0.5</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>surround_check_hysteresis_distance</td>
-<td>float</td>
-<td>If no object exists in this hysteresis distance added to the above distance, transit to "non-surrounding-obstacle" status [m]</td>
-<td>0.3</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>state_clear_time</td>
-<td>float</td>
-<td>Threshold to clear stop state [s]</td>
-<td>2.0</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>stop_state_ego_speed</td>
-<td>float</td>
-<td>Threshold to check ego vehicle stopped [m/s]</td>
-<td>0.1</td>
-<td>≥0.0</td>
-</tr>
-<tr>
-<td>publish_debug_footprints</td>
-<td>boolean</td>
-<td>Publish vehicle footprint &amp; footprints with surround_check_distance and surround_check_recover_distance offsets.</td>
-<td>true</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>debug_footprint_label</td>
+<td>plugins_path</td>
 <td>string</td>
-<td>select the label for debug footprint</td>
-<td>car</td>
-<td>['pointcloud', 'unknown', 'car', 'truck', 'bus', 'trailer', 'motorcycle', 'bicycle', 'pedestrian']</td>
+<td>Path to libautoware_tensorrt_plugins.so file for the diffusion planner</td>
+<td>$(find-pkg-share autoware_tensorrt_plugins)/plugins/libautoware_tensorrt_plugins.so</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>artifact_dir</td>
+<td>string</td>
+<td>Path to the Artifact(onnx model, etc.) directory</td>
+<td>$(env HOME)/autoware_data/diffusion_planner</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>onnx_model_path</td>
+<td>string</td>
+<td>Path to the ONNX model file for the diffusion planner</td>
+<td>$(var artifact_dir)/diffusion_planner.onnx</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>args_path</td>
+<td>string</td>
+<td>Path to model argument/configuration file</td>
+<td>$(var artifact_dir)/diffusion_planner.param.json</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>planning_frequency_hz</td>
+<td>float</td>
+<td>Planning frequency in Hz</td>
+<td>10.0</td>
+<td>&gt;0</td>
+</tr>
+<tr>
+<td>ignore_neighbors</td>
+<td>boolean</td>
+<td>Ignore neighbor agents</td>
+<td>False</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>ignore_unknown_neighbors</td>
+<td>boolean</td>
+<td>Ignore neighbor agents with unknown class</td>
+<td>True</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>predict_neighbor_trajectory</td>
+<td>boolean</td>
+<td>Predict trajectories for neighbor agents</td>
+<td>True</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>update_traffic_light_group_info</td>
+<td>boolean</td>
+<td>Enable updating of traffic light group info</td>
+<td>True</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>traffic_light_group_msg_timeout_seconds</td>
+<td>float</td>
+<td>Timeout for traffic light group messages (seconds)</td>
+<td>0.2</td>
+<td>&gt;0</td>
+</tr>
+<tr>
+<td>build_only</td>
+<td>boolean</td>
+<td>On build only, do not run the planner</td>
+<td>False</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>debug_params.publish_debug_map</td>
+<td>boolean</td>
+<td>Publish debug map markers</td>
+<td>False</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>debug_params.publish_debug_route</td>
+<td>boolean</td>
+<td>Publish debug route markers</td>
+<td>False</td>
+<td>N/A</td>
 </tr>
 </tbody>
 </table>
+<p>Parameters can be set via YAML (see <code>config/diffusion_planner.param.yaml</code>).</p>
+<hr>
+<h2 id="inputs">Inputs<a class="headerlink" href="#inputs" title="Permanent link">#</a></h2>
 <table>
 <thead>
 <tr>
-<th align="left">Name</th>
-<th align="left">Type</th>
-<th align="left">Description</th>
-<th align="left">Default value</th>
+<th>Topic</th>
+<th>Message Type</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left"><code>enable_check</code></td>
-<td align="left"><code>bool</code></td>
-<td align="left">Indicates whether each object is considered in the obstacle check target.</td>
-<td align="left"><code>true</code> for objects; <code>false</code> for point clouds</td>
+<td><code>~/input/odometry</code></td>
+<td>nav_msgs/msg/Odometry</td>
+<td>Ego vehicle odometry</td>
 </tr>
 <tr>
-<td align="left"><code>surround_check_front_distance</code></td>
-<td align="left"><code>bool</code></td>
-<td align="left">If there are objects or point clouds within this distance in front, transition to the "exist-surrounding-obstacle" status [m].</td>
-<td align="left">0.5</td>
+<td><code>~/input/acceleration</code></td>
+<td>geometry_msgs/msg/AccelWithCovarianceStamped</td>
+<td>Ego acceleration</td>
 </tr>
 <tr>
-<td align="left"><code>surround_check_side_distance</code></td>
-<td align="left"><code>double</code></td>
-<td align="left">If there are objects or point clouds within this side distance, transition to the "exist-surrounding-obstacle" status [m].</td>
-<td align="left">0.5</td>
+<td><code>~/input/tracked_objects</code></td>
+<td>autoware_perception_msgs/msg/TrackedObjects</td>
+<td>Detected dynamic objects</td>
 </tr>
 <tr>
-<td align="left"><code>surround_check_back_distance</code></td>
-<td align="left"><code>double</code></td>
-<td align="left">If there are objects or point clouds within this back distance, transition to the "exist-surrounding-obstacle" status [m].</td>
-<td align="left">0.5</td>
+<td><code>~/input/traffic_signals</code></td>
+<td>autoware_perception_msgs/msg/TrafficLightGroupArray</td>
+<td>Traffic light states</td>
 </tr>
 <tr>
-<td align="left"><code>surround_check_hysteresis_distance</code></td>
-<td align="left"><code>double</code></td>
-<td align="left">If no object exists within <code>surround_check_xxx_distance</code> plus this additional distance, transition to the "non-surrounding-obstacle" status [m].</td>
-<td align="left">0.3</td>
+<td><code>~/input/vector_map</code></td>
+<td>autoware_map_msgs/msg/LaneletMapBin</td>
+<td>Lanelet2 map</td>
 </tr>
 <tr>
-<td align="left"><code>state_clear_time</code></td>
-<td align="left"><code>double</code></td>
-<td align="left">Threshold to clear stop state [s]</td>
-<td align="left">2.0</td>
-</tr>
-<tr>
-<td align="left"><code>stop_state_ego_speed</code></td>
-<td align="left"><code>double</code></td>
-<td align="left">Threshold to check ego vehicle stopped [m/s]</td>
-<td align="left">0.1</td>
-</tr>
-<tr>
-<td align="left"><code>stop_state_entry_duration_time</code></td>
-<td align="left"><code>double</code></td>
-<td align="left">Threshold to check ego vehicle stopped [s]</td>
-<td align="left">0.1</td>
-</tr>
-<tr>
-<td align="left"><code>publish_debug_footprints</code></td>
-<td align="left"><code>bool</code></td>
-<td align="left">Publish vehicle footprint with/without offsets</td>
-<td align="left"><code>true</code></td>
+<td><code>~/input/route</code></td>
+<td>autoware_planning_msgs/msg/LaneletRoute</td>
+<td>Route information</td>
 </tr>
 </tbody>
 </table>
-<h2 id="assumptions-known-limits">Assumptions / Known limits<a class="headerlink" href="#assumptions-known-limits" title="Permanent link">#</a></h2>
-<p>To perform stop planning, it is necessary to get obstacle pointclouds data.
-Hence, it does not plan stopping if the obstacle is in blind spot.</p></div>
+<h2 id="outputs">Outputs<a class="headerlink" href="#outputs" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Message Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/output/trajectory</code></td>
+<td>autoware_planning_msgs/msg/Trajectory</td>
+<td>Planned trajectory for the ego vehicle</td>
+</tr>
+<tr>
+<td><code>~/output/trajectories</code></td>
+<td>autoware_new_planning_msgs/msg/Trajectories</td>
+<td>Multiple candidate trajectories</td>
+</tr>
+<tr>
+<td><code>~/output/predicted_objects</code></td>
+<td>autoware_perception_msgs/msg/PredictedObjects</td>
+<td>Predicted future states of dynamic objects</td>
+</tr>
+<tr>
+<td><code>~/debug/lane_marker</code></td>
+<td>visualization_msgs/msg/MarkerArray</td>
+<td>Lane debug markers</td>
+</tr>
+<tr>
+<td><code>~/debug/route_marker</code></td>
+<td>visualization_msgs/msg/MarkerArray</td>
+<td>Route debug markers</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">#</a></h2>
+<p>Unit tests are provided and can be run with:</p>
+<div class="highlight"><pre><span></span><code>colcon<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--packages-select<span class="w"> </span>autoware_diffusion_planner
+colcon<span class="w"> </span>test-result<span class="w"> </span>--all
+</code></pre></div>
+<hr>
+<h2 id="limitations">❗ Limitations<a class="headerlink" href="#limitations" title="Permanent link">#</a></h2>
+<p>While the Diffusion Planner shows promising capabilities, there are several limitations to be aware of:</p>
+<ul>
+<li><strong>Route Termination</strong>:
+  The route input to the model consists of a sequence of preferred lanelets from the current position to the goal region. However, <strong>this route does not necessarily end exactly at the goal position</strong>. As a result, the ego vehicle <strong>may continue driving past the goal</strong> instead of stopping at the target location.</li>
+</ul>
+<ul>
+<li><strong>Training Dataset Domain Gap</strong>:
+  The provided diffusion model checkpoint was trained on datasets using a <strong>proprietary Lanelet2 map that is not publicly available</strong>. Consequently, <strong>performance may significantly degrade when running on other maps</strong>, especially in environments with different topology or tagging conventions.</li>
+</ul>
+<ul>
+<li><strong>Route Adherence &amp; Lane Changing</strong>:
+  The model sometimes <strong>fails to strictly follow the preferred lanelet route</strong>. If the ego vehicle leaves the preferred lane (e.g., to avoid an obstacle), it tends to <strong>only return to the route during curves</strong>. It <strong>seldom performs deliberate lane changes</strong> to merge back into the correct route on straight segments.</li>
+</ul>
+<ul>
+<li><strong>Agent and Obstacle Avoidance</strong>:
+  Although the planner <strong>reacts to other agents and can perform avoidance maneuvers</strong>, this behavior is <strong>not fully reliable</strong>. In some cases, <strong>collisions with static or dynamic obstacles may still occur</strong> due to ignored agents or insufficient context comprehension.</li>
+</ul>
+<ul>
+<li><strong>Lack of Static Object Context</strong>:
+  Static environment context such as <strong>traffic cones, guard rails, or construction barriers</strong> is <strong>not currently provided to the model</strong>. Instead, an <strong>empty tensor</strong> is passed in their place, which can lead to <strong>limited understanding of occlusions or drivable boundaries</strong>.</li>
+</ul>
+<hr>
+<h2 id="development-contribution">Development &amp; Contribution<a class="headerlink" href="#development-contribution" title="Permanent link">#</a></h2>
+<ul>
+<li>Follow the <a href="https://autowarefoundation.github.io/autoware-documentation/main/contributing/">Autoware coding guidelines</a>.</li>
+<li>Contributions, bug reports, and feature requests are welcome via GitHub issues and pull requests.</li>
+</ul>
+<hr>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">#</a></h2>
+<ul>
+<li><a href="https://github.com/ZhengYinan-AIR/Diffusion-Planner">Diffusion Planner (original repo)</a></li>
+<li><a href="https://github.com/tier4/Diffusion-Planner">Diffusion planner (our fork of the previous repo, used to train the model)</a></li>
+<li><a href="https://arxiv.org/abs/2309.00615">"Diffusion-Based Planning for Autonomous Driving with Flexible Guidance"</a></li>
+</ul>
+<hr>
+<h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">#</a></h2>
+<p>This package is released under the Apache 2.0 License.</p></div>
 
 
 
@@ -14460,7 +14210,7 @@ Hence, it does not plan stopping if the obstacle is in blind spot.</p></div>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../autoware_scenario_selector/" class="md-footer__link md-footer__link--prev" aria-label="Previous: autoware_scenario_selector" rel="prev">
+          <a href="../autoware_costmap_generator/" class="md-footer__link md-footer__link--prev" aria-label="Previous: costmap_generator" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -14469,20 +14219,20 @@ Hence, it does not plan stopping if the obstacle is in blind spot.</p></div>
                 Previous
               </span>
               <div class="md-ellipsis">
-                autoware_scenario_selector
+                costmap_generator
               </div>
             </div>
           </a>
         
         
           
-          <a href="surround_obstacle_checker-design.ja/" class="md-footer__link md-footer__link--next" aria-label="Next: Surround Obstacle Checker" rel="next">
+          <a href="../autoware_external_velocity_limit_selector/" class="md-footer__link md-footer__link--next" aria-label="Next: External Velocity Limit Selector" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Surround Obstacle Checker
+                External Velocity Limit Selector
               </div>
             </div>
             <div class="md-footer__button md-icon">

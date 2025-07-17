@@ -716,6 +716,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware_universe/main/planning/autoware_diffusion_planner/</loc>
+         <lastmod>2025-07-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware_universe/main/planning/autoware_external_velocity_limit_selector/</loc>
          <lastmod>2025-07-17</lastmod>
          <changefreq>daily</changefreq>
