@@ -13917,6 +13917,40 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#performance-benchmark-unit-testing" class="md-nav__link">
+    Performance Benchmark &amp; Unit Testing
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Benchmark & Unit Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-run-locally" class="md-nav__link">
+    How to Run Locally
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rosbag-replay-visualization" class="md-nav__link">
+    Rosbag Replay &amp; Visualization
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#optional-error-detection-and-handling" class="md-nav__link">
     (Optional) Error detection and handling
   </a>
@@ -14497,6 +14531,46 @@ For big vehicles such as trucks and buses, we have separate models for passenger
 </table>
 <h2 id="assumptions-known-limits">Assumptions / Known limits<a class="headerlink" href="#assumptions-known-limits" title="Permanent link">#</a></h2>
 <p>See the <a href="models/">model explanations</a>.</p>
+<h2 id="performance-benchmark-unit-testing">Performance Benchmark &amp; Unit Testing<a class="headerlink" href="#performance-benchmark-unit-testing" title="Permanent link">#</a></h2>
+<h3 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">#</a></h3>
+<p>Unit tests and benchmarks are included to evaluate tracker performance under varying detection loads and object types.</p>
+<h3 id="how-to-run-locally">How to Run Locally<a class="headerlink" href="#how-to-run-locally" title="Permanent link">#</a></h3>
+<h4 id="1-build-with-tests">1. Build with Tests<a class="headerlink" href="#1-build-with-tests" title="Permanent link">#</a></h4>
+<div class="highlight"><pre><span></span><code>colcon<span class="w"> </span>build<span class="w"> </span>--packages-select<span class="w"> </span>autoware_multi_object_tracker<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--cmake-args<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>RelWithDebInfo
+</code></pre></div>
+<h4 id="2-run-the-performance-benchmark">2. Run the Performance Benchmark<a class="headerlink" href="#2-run-the-performance-benchmark" title="Permanent link">#</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>install/setup.bash
+./build/autoware_multi_object_tracker/test_multi_object_tracker
+</code></pre></div>
+<p>This runs the default test (<code>runPerformanceTest</code>) and outputs timing data.</p>
+<h4 id="3-enable-optional-profiling-modes-manual">3. Enable Optional Profiling Modes (Manual)<a class="headerlink" href="#3-enable-optional-profiling-modes-manual" title="Permanent link">#</a></h4>
+<p>To evaluate scalability with object count:</p>
+<ul>
+<li>Manually enable the following functions in the test source:<ul>
+<li><code>profilePerformanceVsCarCount()</code></li>
+<li><code>profilePerformanceVsPedestrianCount()</code></li>
+</ul>
+</li>
+</ul>
+<p>These run additional profiling scenarios.</p>
+<h3 id="rosbag-replay-visualization">Rosbag Replay &amp; Visualization<a class="headerlink" href="#rosbag-replay-visualization" title="Permanent link">#</a></h3>
+<h4 id="simulated-rosbag-output">Simulated Rosbag Output<a class="headerlink" href="#simulated-rosbag-output" title="Permanent link">#</a></h4>
+<p>To record benchmark results for visualization in RViz:</p>
+<ol>
+<li>Enable <code>write_bag = true</code> in <code>runIterations()</code></li>
+<li>Run the test; the output <code>.db3</code> path is printed</li>
+<li>Visualize:</li>
+</ol>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>bag<span class="w"> </span>play<span class="w"> </span>&lt;output_file&gt;.db3
+rviz2<span class="w"> </span>-d<span class="w"> </span>&lt;your_rviz_config&gt;.rviz
+</code></pre></div>
+<h4 id="real-rosbag-input">Real Rosbag Input<a class="headerlink" href="#real-rosbag-input" title="Permanent link">#</a></h4>
+<ol>
+<li>Set the path in <code>runPerformanceTestWithRosbag()</code> to a real <code>.db3</code> file</li>
+<li>Run the test</li>
+<li>Visualize the tracking result in RViz</li>
+</ol>
 <h2 id="optional-error-detection-and-handling">(Optional) Error detection and handling<a class="headerlink" href="#optional-error-detection-and-handling" title="Permanent link">#</a></h2>
 <!-- Write how to detect errors and how to recover from them.
 
@@ -14506,7 +14580,7 @@ Example:
 
 <h2 id="optional-performance-characterization">(Optional) Performance characterization<a class="headerlink" href="#optional-performance-characterization" title="Permanent link">#</a></h2>
 <h3 id="evaluation-of-mussp">Evaluation of muSSP<a class="headerlink" href="#evaluation-of-mussp" title="Permanent link">#</a></h3>
-<p>According to our evaluation, muSSP is faster than normal <a href="src/data_association/successive_shortest_path">SSP</a> when the matrix size is more than 100.</p>
+<p>According to our evaluation, muSSP is faster than normal <a href="lib/association/successive_shortest_path">SSP</a> when the matrix size is more than 100.</p>
 <p>Execution time for varying matrix size at 95% sparsity. In real data, the sparsity was often around 95%.
 <img alt="mussp_evaluation1" src="image/mussp_evaluation1.png"></p>
 <p>Execution time for varying the sparsity with matrix size 100.
@@ -14523,7 +14597,7 @@ Example:
 </thead>
 <tbody>
 <tr>
-<td><a href="src/data_association/mu_successive_shortest_path">muSSP</a></td>
+<td><a href="lib/association/mu_successive_shortest_path">muSSP</a></td>
 <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache-2.0</a></td>
 <td><a href="https://github.com/yu-lab-vt/muSSP">https://github.com/yu-lab-vt/muSSP</a></td>
 </tr>
