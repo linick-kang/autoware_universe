@@ -13971,6 +13971,11 @@ Then, the slow down velocity is calculated by linear interpolation with the dist
 </tr>
 </tbody>
 </table>
+<p>The parameters <code>min/max_ego_velocity</code> and <code>min/max_lat_margin</code> can be adjusted based on the obstacle type,
+its side relative to the ego trajectory, and whether it is moving or not.
+Default values must be provided at launch (<code>object_type_specified_params.default...</code>),
+but each parameter can be overridden for specific cases (obstacle type, left or right, moving or not).
+For example, the <code>min_ego_velocity</code> can be modified for moving cars on the left by setting a different value with parameter <code>object_type_specified_params.default.left.moving.min_ego_velocity</code>.</p>
 <p>The calculated velocity is inserted in the trajectory where the obstacle is inside the area with <code>obstacle_filtering.max_lat_margin</code>.
 More precisely, the velocity is inserted <code>&lt;slow down velocity&gt;</code> * <code>slow_down_planning.time_margin_on_target_velocity</code> meters behind the obstacle.</p>
 <p><img alt="slow_down_planning" src="docs/slow_down_planning.drawio.svg"></p>
