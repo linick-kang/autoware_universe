@@ -13946,9 +13946,9 @@
 This includes not only cruising a front vehicle, but also reacting a cut-in and cut-out vehicle.</p>
 <p>The safe distance is calculated dynamically based on the Responsibility-Sensitive Safety (RSS) by the following equation.</p>
 <div class="arithmatex">\[
-d_{rss} = v_{ego} t_{idling} + \frac{1}{2} a_{ego} t_{idling}^2 + \frac{v_{ego}^2}{2 a_{ego}} - \frac{v_{obstacle}^2}{2 a_{obstacle}},
+d_{rss} = v_{ego} t_{idling} + \frac{v_{ego}^2}{2 a_{ego}} - \frac{v_{obstacle}^2}{2 a_{obstacle}} + l_{margin},
 \]</div>
-<p>assuming that <span class="arithmatex">\(d_{rss}\)</span> is the calculated safe distance, <span class="arithmatex">\(t_{idling}\)</span> is the idling time for the ego to detect the front vehicle's deceleration, <span class="arithmatex">\(v_{ego}\)</span> is the ego's current velocity, <span class="arithmatex">\(v_{obstacle}\)</span> is the front obstacle's current velocity, <span class="arithmatex">\(a_{ego}\)</span> is the ego's acceleration, and <span class="arithmatex">\(a_{obstacle}\)</span> is the obstacle's acceleration.
+<p>assuming that <span class="arithmatex">\(d_{rss}\)</span> is the calculated safe distance, <span class="arithmatex">\(t_{idling}\)</span> is the idling time for the ego to detect the front vehicle's deceleration, <span class="arithmatex">\(v_{ego}\)</span> is the ego's current velocity, <span class="arithmatex">\(v_{obstacle}\)</span> is the front obstacle's current velocity, <span class="arithmatex">\(a_{ego}\)</span> is the ego's acceleration, <span class="arithmatex">\(a_{obstacle}\)</span> is the obstacle's acceleration, and <span class="arithmatex">\(l_{margin}\)</span> is the safety margin.
 These values are parameterized as follows. Other common values such as ego's minimum acceleration is defined in <code>common.param.yaml</code>.</p>
 <table>
 <thead>
@@ -13973,6 +13973,11 @@ These values are parameterized as follows. Other common values such as ego's min
 <td><code>cruise_planning.min_object_accel_for_rss</code></td>
 <td>double</td>
 <td>front obstacle's acceleration for RSS [m/ss]</td>
+</tr>
+<tr>
+<td><code>cruise_planning.safe_distance_margin</code></td>
+<td>double</td>
+<td>safety margin for RSS [m]</td>
 </tr>
 </tbody>
 </table>
