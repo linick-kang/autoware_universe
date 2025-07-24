@@ -13864,6 +13864,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#latency-measurement" class="md-nav__link">
+    Latency Measurement
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -13948,6 +13955,9 @@ Also, when <code>convert_actuation_to_steering_status: true</code>, this node re
 <p><strong>Under development</strong>
 A feature that compensates for control commands according to the dynamic characteristics of the vehicle.
 This feature works when <code>use_vehicle_adaptor: true</code> is set and requires <code>control_horizon</code> to be enabled, so you need to set <code>enable_control_cmd_horizon_pub: true</code> in the trajectory_follower node.</p>
+<h3 id="latency-measurement">Latency Measurement<a class="headerlink" href="#latency-measurement" title="Permanent link">#</a></h3>
+<p>This node includes a latency measurement feature that tracks the time difference between receiving a control command and publishing the corresponding actuation command. The measured latency is published as a debug topic, which can be useful for performance monitoring and system optimization.</p>
+<p>The latency is calculated as the time difference between the timestamp of the incoming control command and the current time when the actuation command is published. When the input <code>control_cmd</code> contains a timestamp that represents the time when the control module started processing (propagated through the control pipeline), the <code>control_component_latency</code> represents the overall processing time of the entire control module system.</p>
 <h2 id="input-topics">Input topics<a class="headerlink" href="#input-topics" title="Permanent link">#</a></h2>
 <table>
 <thead>
@@ -14026,6 +14036,11 @@ This feature works when <code>use_vehicle_adaptor: true</code> is set and requir
 <td><code>~/output/steering_status</code></td>
 <td>autoware_vehicle_msgs::msg::SteeringReport</td>
 <td>publish only when <code>convert_actuation_to_steering_status: true</code>. steer tire angle is calculated from steer wheel angle and published.</td>
+</tr>
+<tr>
+<td><code>~/output/control_component_latency</code></td>
+<td>autoware_internal_debug_msgs::msg::Float64Stamped</td>
+<td>control system latency measurement from control command reception to actuation command publication</td>
 </tr>
 </tbody>
 </table>

@@ -14198,6 +14198,35 @@ t_{predicted} = \dfrac{d_{lat}}{v_{lat}}
 </div>
 
 <p>If there are a reachable crosswalk entry points within the <code>prediction_time_horizon</code> and the objects satisfies above condition, this module outputs additional predicted path to cross the opposite side via the crosswalk entry point.</p>
+<p>To prevent the predicted crossing path from chattering due to noise in the estimated pose or velocity of a pedestrian who is judged to have crossing intention, the module holds the crossing intention state for a certain duration based on the following parameters:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Unit</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>crossing_intention_duration</code></td>
+<td>[s]</td>
+<td>double</td>
+<td>Minimum duration that crossing intention must continuously persist to be judged as true</td>
+</tr>
+<tr>
+<td><code>no_crossing_intention_duration</code></td>
+<td>[s]</td>
+<td>double</td>
+<td>Minimum duration that lack of crossing intention must continuously persist to be judged as false</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Increasing <code>crossing_intention_duration</code> can reduce the frequency of false positives caused by noise that mistakenly indicates crossing intention. However, it also delays the system’s response to pedestrians who actually intend to cross. Therefore, setting this parameter to a large value is <strong>not recommended</strong>.</p>
+</div>
 <p>This module takes into account the corresponding traffic light information.
 When RED signal is indicated, we assume the target object will not walk across.
 In addition, if the target object is stopping (not moving) against GREEN signal, we assume the target object will not walk across either.
