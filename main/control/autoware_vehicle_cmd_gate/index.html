@@ -13867,6 +13867,19 @@
     Parameters
   </a>
   
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameter-naming-convention" class="md-nav__link">
+    Parameter Naming Convention
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -14181,29 +14194,49 @@
 <td>limit of longitudinal velocity (activated in AUTONOMOUS operation mode)</td>
 </tr>
 <tr>
-<td><code>nominal.reference_speed_point</code></td>
+<td><code>nominal.reference_speed_points</code></td>
 <td><double></double></td>
 <td>velocity point used as a reference when calculate control command limit (activated in AUTONOMOUS operation mode). The size of this array must be equivalent to the size of the limit array.</td>
 </tr>
 <tr>
-<td><code>nominal.lon_acc_lim</code></td>
+<td><code>nominal.lon_acc_lim_for_lon_vel</code></td>
 <td><double></double></td>
-<td>array of limits of longitudinal acceleration (activated in AUTONOMOUS operation mode)</td>
+<td>array of limits for longitudinal acceleration (activated in AUTONOMOUS operation mode)</td>
 </tr>
 <tr>
-<td><code>nominal.lon_jerk_lim</code></td>
+<td><code>nominal.lon_jerk_lim_for_lon_acc</code></td>
 <td><double></double></td>
-<td>array of limits of longitudinal jerk (activated in AUTONOMOUS operation mode)</td>
+<td>array of limits for longitudinal jerk (activated in AUTONOMOUS operation mode)</td>
 </tr>
 <tr>
-<td><code>nominal.lat_acc_lim</code></td>
+<td><code>nominal.lat_acc_lim_for_steer_cmd</code></td>
 <td><double></double></td>
-<td>array of limits of lateral acceleration (activated in AUTONOMOUS operation mode)</td>
+<td>array of limits for lateral acceleration (activated in AUTONOMOUS operation mode)</td>
 </tr>
 <tr>
-<td><code>nominal.lat_jerk_lim</code></td>
+<td><code>nominal.lat_jerk_lim_for_steer_cmd</code></td>
 <td><double></double></td>
-<td>array of limits of lateral jerk (activated in AUTONOMOUS operation mode)</td>
+<td>array of limits for lateral jerk (activated in AUTONOMOUS operation mode)</td>
+</tr>
+<tr>
+<td><code>nominal.steer_cmd_lim</code></td>
+<td><double></double></td>
+<td>array of limits for steering angle (activated in AUTONOMOUS operation mode)</td>
+</tr>
+<tr>
+<td><code>nominal.steer_rate_lim_for_steer_cmd</code></td>
+<td><double></double></td>
+<td>array of limits for command steering rate (activated in AUTONOMOUS operation mode)</td>
+</tr>
+<tr>
+<td><code>nominal.lat_jerk_lim_for_steer_rate</code></td>
+<td>double</td>
+<td>limit for lateral jerk constraint on steering rate (activated in AUTONOMOUS operation mode)</td>
+</tr>
+<tr>
+<td><code>nominal.steer_cmd_diff_lim_from_current_steer</code></td>
+<td><double></double></td>
+<td>array of limits for difference between current and command steering angle (activated in AUTONOMOUS operation mode)</td>
 </tr>
 <tr>
 <td><code>on_transition.vel_lim</code></td>
@@ -14211,32 +14244,69 @@
 <td>limit of longitudinal velocity (activated in TRANSITION operation mode)</td>
 </tr>
 <tr>
-<td><code>on_transition.reference_speed_point</code></td>
+<td><code>on_transition.reference_speed_points</code></td>
 <td><double></double></td>
 <td>velocity point used as a reference when calculate control command limit (activated in TRANSITION operation mode). The size of this array must be equivalent to the size of the limit array.</td>
 </tr>
 <tr>
-<td><code>on_transition.lon_acc_lim</code></td>
+<td><code>on_transition.lon_acc_lim_for_lon_vel</code></td>
 <td><double></double></td>
-<td>array of limits of longitudinal acceleration (activated in TRANSITION operation mode)</td>
+<td>array of limits for longitudinal acceleration (activated in TRANSITION operation mode)</td>
 </tr>
 <tr>
-<td><code>on_transition.lon_jerk_lim</code></td>
+<td><code>on_transition.lon_jerk_lim_for_lon_acc</code></td>
 <td><double></double></td>
-<td>array of limits of longitudinal jerk (activated in TRANSITION operation mode)</td>
+<td>array of limits for longitudinal jerk (activated in TRANSITION operation mode)</td>
 </tr>
 <tr>
-<td><code>on_transition.lat_acc_lim</code></td>
+<td><code>on_transition.lat_acc_lim_for_steer_cmd</code></td>
 <td><double></double></td>
-<td>array of limits of lateral acceleration (activated in TRANSITION operation mode)</td>
+<td>array of limits for lateral acceleration (activated in TRANSITION operation mode)</td>
 </tr>
 <tr>
-<td><code>on_transition.lat_jerk_lim</code></td>
+<td><code>on_transition.lat_jerk_lim_for_steer_cmd</code></td>
 <td><double></double></td>
-<td>array of limits of lateral jerk (activated in TRANSITION operation mode)</td>
+<td>array of limits for lateral jerk (activated in TRANSITION operation mode)</td>
+</tr>
+<tr>
+<td><code>on_transition.steer_cmd_lim</code></td>
+<td><double></double></td>
+<td>array of limits for steering angle (activated in TRANSITION operation mode)</td>
+</tr>
+<tr>
+<td><code>on_transition.steer_rate_lim_for_steer_cmd</code></td>
+<td><double></double></td>
+<td>array of limits for command steering rate (activated in TRANSITION operation mode)</td>
+</tr>
+<tr>
+<td><code>on_transition.lat_jerk_lim_for_steer_rate</code></td>
+<td>double</td>
+<td>limit for lateral jerk constraint on steering rate (activated in TRANSITION operation mode)</td>
+</tr>
+<tr>
+<td><code>on_transition.steer_cmd_diff_lim_from_current_steer</code></td>
+<td><double></double></td>
+<td>array of limits for difference between current and command steering angle (activated in TRANSITION operation mode)</td>
 </tr>
 </tbody>
 </table>
+<h3 id="parameter-naming-convention">Parameter Naming Convention<a class="headerlink" href="#parameter-naming-convention" title="Permanent link">#</a></h3>
+<p>The parameters follow specific naming patterns to clearly distinguish between different types of constraints and their relationships:</p>
+<h4 id="pattern-1-constraint_lim_for_target">Pattern 1: <code>[constraint]_lim_for_[target]</code><a class="headerlink" href="#pattern-1-constraint_lim_for_target" title="Permanent link">#</a></h4>
+<ul>
+<li><strong>Format</strong>: <code>[physical_constraint]_lim_for_[controlled_variable]</code></li>
+<li><strong>Description</strong>: Defines limits based on physical constraints (acceleration, jerk, etc.) applied to control variables</li>
+</ul>
+<h4 id="pattern-2-target_constraint_lim_from_reference">Pattern 2: <code>[target]_[constraint]_lim_from_[reference]</code><a class="headerlink" href="#pattern-2-target_constraint_lim_from_reference" title="Permanent link">#</a></h4>
+<ul>
+<li><strong>Format</strong>: <code>[controlled_variable]_[constraint_type]_lim_from_[reference_variable]</code></li>
+<li><strong>Description</strong>: Defines limits on the difference or deviation of a control variable from a reference value</li>
+</ul>
+<h4 id="pattern-3-target_lim">Pattern 3: <code>[target]_lim</code><a class="headerlink" href="#pattern-3-target_lim" title="Permanent link">#</a></h4>
+<ul>
+<li><strong>Format</strong>: <code>[controlled_variable]_lim</code></li>
+<li><strong>Description</strong>: Defines absolute limits for control variables</li>
+</ul>
 <h2 id="functionality">Functionality<a class="headerlink" href="#functionality" title="Permanent link">#</a></h2>
 <h3 id="main-functionality">Main Functionality<a class="headerlink" href="#main-functionality" title="Permanent link">#</a></h3>
 <ul>
