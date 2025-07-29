@@ -8,20 +8,20 @@
       
       
       
-        <link rel="canonical" href="https://autowarefoundation.github.io/autoware_universe/main/perception/autoware_multi_object_tracker/">
+        <link rel="canonical" href="https://autowarefoundation.github.io/autoware_universe/main/system/autoware_pipeline_latency_monitor/">
       
       
-        <link rel="prev" href="../autoware_map_based_prediction/">
+        <link rel="prev" href="../autoware_mrm_handler/">
       
       
-        <link rel="next" href="models/">
+        <link rel="next" href="../autoware_processing_time_checker/">
       
       <link rel="icon" href="../../docs/assets/images/autoware-foundation.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.20">
     
     
       
-        <title>multi_object_tracker - Autoware Universe Documentation</title>
+        <title>pipeline_latency_monitor - Autoware Universe Documentation</title>
       
     
     
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#multi_object_tracker" class="md-skip">
+        <a href="#pipeline_latency_monitor" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              multi_object_tracker
+              pipeline_latency_monitor
             
           </span>
         </div>
@@ -339,8 +339,6 @@
         
   
   
-    
-  
 
 
   
@@ -352,7 +350,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../autoware_bevfusion/" class="md-tabs__link md-tabs__link--active">
+      <a href="../../perception/autoware_bevfusion/" class="md-tabs__link">
         Perception
       </a>
     </li>
@@ -426,6 +424,8 @@
         
   
   
+    
+  
 
 
   
@@ -437,7 +437,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../system/autoware_bluetooth_monitor/" class="md-tabs__link">
+      <a href="../autoware_bluetooth_monitor/" class="md-tabs__link md-tabs__link--active">
         System
       </a>
     </li>
@@ -4599,16 +4599,16 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
       
       
         
@@ -4709,7 +4709,7 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
           Perception
@@ -4744,7 +4744,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_bevfusion/">Autoware bevfusion</a>
+          <a href="../../perception/autoware_bevfusion/">Autoware bevfusion</a>
           
         </div>
       
@@ -4792,7 +4792,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_bytetrack/">Autoware bytetrack</a>
+          <a href="../../perception/autoware_bytetrack/">Autoware bytetrack</a>
           
         </div>
       
@@ -4840,7 +4840,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_cluster_merger/">Autoware cluster merger</a>
+          <a href="../../perception/autoware_cluster_merger/">Autoware cluster merger</a>
           
         </div>
       
@@ -4888,7 +4888,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_compare_map_segmentation/">Autoware compare map segmentation</a>
+          <a href="../../perception/autoware_compare_map_segmentation/">Autoware compare map segmentation</a>
           
         </div>
       
@@ -4936,7 +4936,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_crosswalk_traffic_light_estimator/">Autoware crosswalk traffic light estimator</a>
+          <a href="../../perception/autoware_crosswalk_traffic_light_estimator/">Autoware crosswalk traffic light estimator</a>
           
         </div>
       
@@ -4984,7 +4984,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_detected_object_feature_remover/">Autoware detected object feature remover</a>
+          <a href="../../perception/autoware_detected_object_feature_remover/">Autoware detected object feature remover</a>
           
         </div>
       
@@ -5040,7 +5040,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_detected_object_validation/">Autoware detected object validation</a>
+          <a href="../../perception/autoware_detected_object_validation/">Autoware detected object validation</a>
           
             <label for="__nav_7_7">
               <span class="md-nav__icon md-icon"></span>
@@ -5063,7 +5063,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_detected_object_validation/object-lanelet-filter/" class="md-nav__link">
+      <a href="../../perception/autoware_detected_object_validation/object-lanelet-filter/" class="md-nav__link">
         object_lanelet_filter
       </a>
     </li>
@@ -5077,7 +5077,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_detected_object_validation/object-position-filter/" class="md-nav__link">
+      <a href="../../perception/autoware_detected_object_validation/object-position-filter/" class="md-nav__link">
         object_position_filter
       </a>
     </li>
@@ -5091,7 +5091,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_detected_object_validation/obstacle-pointcloud-based-validator/" class="md-nav__link">
+      <a href="../../perception/autoware_detected_object_validation/obstacle-pointcloud-based-validator/" class="md-nav__link">
         obstacle pointcloud based validator
       </a>
     </li>
@@ -5105,7 +5105,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_detected_object_validation/occupancy-grid-based-validator/" class="md-nav__link">
+      <a href="../../perception/autoware_detected_object_validation/occupancy-grid-based-validator/" class="md-nav__link">
         occupancy grid based validator
       </a>
     </li>
@@ -5148,7 +5148,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_detection_by_tracker/">Autoware detection by tracker</a>
+          <a href="../../perception/autoware_detection_by_tracker/">Autoware detection by tracker</a>
           
         </div>
       
@@ -5196,7 +5196,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_elevation_map_loader/">Autoware elevation map loader</a>
+          <a href="../../perception/autoware_elevation_map_loader/">Autoware elevation map loader</a>
           
         </div>
       
@@ -5244,7 +5244,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_euclidean_cluster/">Autoware euclidean cluster</a>
+          <a href="../../perception/autoware_euclidean_cluster/">Autoware euclidean cluster</a>
           
         </div>
       
@@ -5294,7 +5294,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_ground_segmentation/">Autoware ground segmentation</a>
+          <a href="../../perception/autoware_ground_segmentation/">Autoware ground segmentation</a>
           
             <label for="__nav_7_11">
               <span class="md-nav__icon md-icon"></span>
@@ -5354,7 +5354,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_ground_segmentation/docs/ransac-ground-filter/" class="md-nav__link">
+      <a href="../../perception/autoware_ground_segmentation/docs/ransac-ground-filter/" class="md-nav__link">
         RANSAC Ground Filter
       </a>
     </li>
@@ -5368,7 +5368,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_ground_segmentation/docs/ray-ground-filter/" class="md-nav__link">
+      <a href="../../perception/autoware_ground_segmentation/docs/ray-ground-filter/" class="md-nav__link">
         Ray Ground Filter
       </a>
     </li>
@@ -5382,7 +5382,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_ground_segmentation/docs/scan-ground-filter/" class="md-nav__link">
+      <a href="../../perception/autoware_ground_segmentation/docs/scan-ground-filter/" class="md-nav__link">
         Scan Ground Filter
       </a>
     </li>
@@ -5434,7 +5434,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_image_projection_based_fusion/">Autoware image projection based fusion</a>
+          <a href="../../perception/autoware_image_projection_based_fusion/">Autoware image projection based fusion</a>
           
             <label for="__nav_7_12">
               <span class="md-nav__icon md-icon"></span>
@@ -5498,7 +5498,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_image_projection_based_fusion/docs/pointpainting-fusion/" class="md-nav__link">
+      <a href="../../perception/autoware_image_projection_based_fusion/docs/pointpainting-fusion/" class="md-nav__link">
         pointpainting_fusion
       </a>
     </li>
@@ -5512,7 +5512,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_image_projection_based_fusion/docs/roi-cluster-fusion/" class="md-nav__link">
+      <a href="../../perception/autoware_image_projection_based_fusion/docs/roi-cluster-fusion/" class="md-nav__link">
         roi_cluster_fusion
       </a>
     </li>
@@ -5526,7 +5526,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_image_projection_based_fusion/docs/roi-detected-object-fusion/" class="md-nav__link">
+      <a href="../../perception/autoware_image_projection_based_fusion/docs/roi-detected-object-fusion/" class="md-nav__link">
         roi_detected_object_fusion
       </a>
     </li>
@@ -5540,7 +5540,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_image_projection_based_fusion/docs/roi-pointcloud-fusion/" class="md-nav__link">
+      <a href="../../perception/autoware_image_projection_based_fusion/docs/roi-pointcloud-fusion/" class="md-nav__link">
         roi_pointcloud_fusion
       </a>
     </li>
@@ -5554,7 +5554,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_image_projection_based_fusion/docs/segmentation-pointcloud-fusion/" class="md-nav__link">
+      <a href="../../perception/autoware_image_projection_based_fusion/docs/segmentation-pointcloud-fusion/" class="md-nav__link">
         segmentation_pointcloud_fusion
       </a>
     </li>
@@ -5604,7 +5604,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_lidar_apollo_instance_segmentation/">Autoware lidar apollo instance segmentation</a>
+          <a href="../../perception/autoware_lidar_apollo_instance_segmentation/">Autoware lidar apollo instance segmentation</a>
           
         </div>
       
@@ -5652,7 +5652,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_lidar_centerpoint/">Autoware lidar centerpoint</a>
+          <a href="../../perception/autoware_lidar_centerpoint/">Autoware lidar centerpoint</a>
           
         </div>
       
@@ -5700,7 +5700,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_lidar_transfusion/">Autoware lidar transfusion</a>
+          <a href="../../perception/autoware_lidar_transfusion/">Autoware lidar transfusion</a>
           
         </div>
       
@@ -5748,7 +5748,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_map_based_prediction/">Autoware map based prediction</a>
+          <a href="../../perception/autoware_map_based_prediction/">Autoware map based prediction</a>
           
         </div>
       
@@ -5772,18 +5772,18 @@
               
   
   
-    
-  
   
     
       
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_17" checked>
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_17" >
       
       
         
@@ -5797,8 +5797,8 @@
       
         
         
-        <div class="md-nav__link md-nav__link--index md-nav__link--active">
-          <a href="./">Autoware multi object tracker</a>
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../perception/autoware_multi_object_tracker/">Autoware multi object tracker</a>
           
             <label for="__nav_7_17">
               <span class="md-nav__icon md-icon"></span>
@@ -5806,7 +5806,7 @@
           
         </div>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_17_label" aria-expanded="true">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_17_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_7_17">
           <span class="md-nav__icon md-icon"></span>
           Autoware multi object tracker
@@ -5821,7 +5821,7 @@
   
   
     <li class="md-nav__item">
-      <a href="models/" class="md-nav__link">
+      <a href="../../perception/autoware_multi_object_tracker/models/" class="md-nav__link">
         Models used in this module
       </a>
     </li>
@@ -5864,7 +5864,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_object_merger/">Autoware object merger</a>
+          <a href="../../perception/autoware_object_merger/">Autoware object merger</a>
           
         </div>
       
@@ -5912,7 +5912,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_object_range_splitter/">Autoware object range splitter</a>
+          <a href="../../perception/autoware_object_range_splitter/">Autoware object range splitter</a>
           
         </div>
       
@@ -5960,7 +5960,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_object_sorter/">Autoware object sorter</a>
+          <a href="../../perception/autoware_object_sorter/">Autoware object sorter</a>
           
         </div>
       
@@ -6008,7 +6008,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_object_velocity_splitter/">Autoware object velocity splitter</a>
+          <a href="../../perception/autoware_object_velocity_splitter/">Autoware object velocity splitter</a>
           
         </div>
       
@@ -6056,7 +6056,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_occupancy_grid_map_outlier_filter/">Autoware occupancy grid map outlier filter</a>
+          <a href="../../perception/autoware_occupancy_grid_map_outlier_filter/">Autoware occupancy grid map outlier filter</a>
           
         </div>
       
@@ -6110,7 +6110,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_probabilistic_occupancy_grid_map/">Autoware probabilistic occupancy grid map</a>
+          <a href="../../perception/autoware_probabilistic_occupancy_grid_map/">Autoware probabilistic occupancy grid map</a>
           
             <label for="__nav_7_23">
               <span class="md-nav__icon md-icon"></span>
@@ -6133,7 +6133,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_probabilistic_occupancy_grid_map/laserscan-based-occupancy-grid-map/" class="md-nav__link">
+      <a href="../../perception/autoware_probabilistic_occupancy_grid_map/laserscan-based-occupancy-grid-map/" class="md-nav__link">
         laserscan based occupancy grid map
       </a>
     </li>
@@ -6147,7 +6147,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_probabilistic_occupancy_grid_map/pointcloud-based-occupancy-grid-map/" class="md-nav__link">
+      <a href="../../perception/autoware_probabilistic_occupancy_grid_map/pointcloud-based-occupancy-grid-map/" class="md-nav__link">
         pointcloud based occupancy grid map
       </a>
     </li>
@@ -6161,7 +6161,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_probabilistic_occupancy_grid_map/synchronized_grid_map_fusion/" class="md-nav__link">
+      <a href="../../perception/autoware_probabilistic_occupancy_grid_map/synchronized_grid_map_fusion/" class="md-nav__link">
         synchronized OGM fusion
       </a>
     </li>
@@ -6206,7 +6206,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_radar_fusion_to_detected_object/">Autoware radar fusion to detected object</a>
+          <a href="../../perception/autoware_radar_fusion_to_detected_object/">Autoware radar fusion to detected object</a>
           
             <label for="__nav_7_24">
               <span class="md-nav__icon md-icon"></span>
@@ -6262,7 +6262,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_radar_fusion_to_detected_object/docs/algorithm/" class="md-nav__link">
+      <a href="../../perception/autoware_radar_fusion_to_detected_object/docs/algorithm/" class="md-nav__link">
         Algorithm
       </a>
     </li>
@@ -6314,7 +6314,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_radar_object_tracker/">Autoware radar object tracker</a>
+          <a href="../../perception/autoware_radar_object_tracker/">Autoware radar object tracker</a>
           
             <label for="__nav_7_25">
               <span class="md-nav__icon md-icon"></span>
@@ -6337,7 +6337,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_radar_object_tracker/models/" class="md-nav__link">
+      <a href="../../perception/autoware_radar_object_tracker/models/" class="md-nav__link">
         models
       </a>
     </li>
@@ -6380,7 +6380,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_radar_tracks_msgs_converter/">Autoware radar tracks msgs converter</a>
+          <a href="../../perception/autoware_radar_tracks_msgs_converter/">Autoware radar tracks msgs converter</a>
           
         </div>
       
@@ -6441,7 +6441,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoware_raindrop_cluster_filter/raindrop_cluster_filter/" class="md-nav__link">
+      <a href="../../perception/autoware_raindrop_cluster_filter/raindrop_cluster_filter/" class="md-nav__link">
         low_intensity_cluster_filter
       </a>
     </li>
@@ -6484,7 +6484,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_shape_estimation/">Autoware shape estimation</a>
+          <a href="../../perception/autoware_shape_estimation/">Autoware shape estimation</a>
           
         </div>
       
@@ -6532,7 +6532,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_simple_object_merger/">Autoware simple object merger</a>
+          <a href="../../perception/autoware_simple_object_merger/">Autoware simple object merger</a>
           
         </div>
       
@@ -6580,7 +6580,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_tensorrt_bevdet/">Autoware tensorrt bevdet</a>
+          <a href="../../perception/autoware_tensorrt_bevdet/">Autoware tensorrt bevdet</a>
           
         </div>
       
@@ -6628,7 +6628,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_tensorrt_classifier/">Autoware tensorrt classifier</a>
+          <a href="../../perception/autoware_tensorrt_classifier/">Autoware tensorrt classifier</a>
           
         </div>
       
@@ -6676,7 +6676,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_tensorrt_common/">Autoware tensorrt common</a>
+          <a href="../../perception/autoware_tensorrt_common/">Autoware tensorrt common</a>
           
         </div>
       
@@ -6724,7 +6724,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_tensorrt_plugins/">Autoware tensorrt plugins</a>
+          <a href="../../perception/autoware_tensorrt_plugins/">Autoware tensorrt plugins</a>
           
         </div>
       
@@ -6772,7 +6772,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_tensorrt_yolox/">Autoware tensorrt yolox</a>
+          <a href="../../perception/autoware_tensorrt_yolox/">Autoware tensorrt yolox</a>
           
         </div>
       
@@ -6820,7 +6820,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_tracking_object_merger/">Autoware tracking object merger</a>
+          <a href="../../perception/autoware_tracking_object_merger/">Autoware tracking object merger</a>
           
         </div>
       
@@ -6868,7 +6868,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_traffic_light_arbiter/">Autoware traffic light arbiter</a>
+          <a href="../../perception/autoware_traffic_light_arbiter/">Autoware traffic light arbiter</a>
           
         </div>
       
@@ -6916,7 +6916,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_traffic_light_category_merger/">Autoware traffic light category merger</a>
+          <a href="../../perception/autoware_traffic_light_category_merger/">Autoware traffic light category merger</a>
           
         </div>
       
@@ -6964,7 +6964,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_traffic_light_classifier/">Autoware traffic light classifier</a>
+          <a href="../../perception/autoware_traffic_light_classifier/">Autoware traffic light classifier</a>
           
         </div>
       
@@ -7012,7 +7012,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_traffic_light_fine_detector/">Autoware traffic light fine detector</a>
+          <a href="../../perception/autoware_traffic_light_fine_detector/">Autoware traffic light fine detector</a>
           
         </div>
       
@@ -7060,7 +7060,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_traffic_light_map_based_detector/">Autoware traffic light map based detector</a>
+          <a href="../../perception/autoware_traffic_light_map_based_detector/">Autoware traffic light map based detector</a>
           
         </div>
       
@@ -7108,7 +7108,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_traffic_light_multi_camera_fusion/">Autoware traffic light multi camera fusion</a>
+          <a href="../../perception/autoware_traffic_light_multi_camera_fusion/">Autoware traffic light multi camera fusion</a>
           
         </div>
       
@@ -7156,7 +7156,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_traffic_light_occlusion_predictor/">Autoware traffic light occlusion predictor</a>
+          <a href="../../perception/autoware_traffic_light_occlusion_predictor/">Autoware traffic light occlusion predictor</a>
           
         </div>
       
@@ -7204,7 +7204,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_traffic_light_selector/">Autoware traffic light selector</a>
+          <a href="../../perception/autoware_traffic_light_selector/">Autoware traffic light selector</a>
           
         </div>
       
@@ -7252,7 +7252,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../autoware_traffic_light_visualization/">Autoware traffic light visualization</a>
+          <a href="../../perception/autoware_traffic_light_visualization/">Autoware traffic light visualization</a>
           
         </div>
       
@@ -7300,7 +7300,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../perception_utils/">Perception utils</a>
+          <a href="../../perception/perception_utils/">Perception utils</a>
           
         </div>
       
@@ -10801,16 +10801,16 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
       
       
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" checked>
       
       
         
@@ -10865,7 +10865,7 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="true">
         <label class="md-nav__title" for="__nav_11">
           <span class="md-nav__icon md-icon"></span>
           System
@@ -10900,7 +10900,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_bluetooth_monitor/">Autoware bluetooth monitor</a>
+          <a href="../autoware_bluetooth_monitor/">Autoware bluetooth monitor</a>
           
         </div>
       
@@ -10948,7 +10948,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_command_mode_decider/">Autoware command mode decider</a>
+          <a href="../autoware_command_mode_decider/">Autoware command mode decider</a>
           
         </div>
       
@@ -10996,7 +10996,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_command_mode_switcher/">Autoware command mode switcher</a>
+          <a href="../autoware_command_mode_switcher/">Autoware command mode switcher</a>
           
         </div>
       
@@ -11044,7 +11044,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_command_mode_types/">Autoware command mode types</a>
+          <a href="../autoware_command_mode_types/">Autoware command mode types</a>
           
         </div>
       
@@ -11092,7 +11092,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_component_monitor/">Autoware component monitor</a>
+          <a href="../autoware_component_monitor/">Autoware component monitor</a>
           
         </div>
       
@@ -11140,7 +11140,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_component_state_monitor/">Autoware component state monitor</a>
+          <a href="../autoware_component_state_monitor/">Autoware component state monitor</a>
           
         </div>
       
@@ -11221,7 +11221,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_default_adapi_helpers/autoware_automatic_pose_initializer/">Autoware automatic pose initializer</a>
+          <a href="../autoware_default_adapi_helpers/autoware_automatic_pose_initializer/">Autoware automatic pose initializer</a>
           
         </div>
       
@@ -11278,7 +11278,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_default_adapi_universe/">Autoware default adapi universe</a>
+          <a href="../autoware_default_adapi_universe/">Autoware default adapi universe</a>
           
             <label for="__nav_11_8">
               <span class="md-nav__icon md-icon"></span>
@@ -11350,7 +11350,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_default_adapi_universe/document/autoware-state/" class="md-nav__link">
+      <a href="../autoware_default_adapi_universe/document/autoware-state/" class="md-nav__link">
         Autoware state compatibility
       </a>
     </li>
@@ -11364,7 +11364,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_default_adapi_universe/document/diagnostics/" class="md-nav__link">
+      <a href="../autoware_default_adapi_universe/document/diagnostics/" class="md-nav__link">
         Diagnostics
       </a>
     </li>
@@ -11378,7 +11378,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_default_adapi_universe/document/fail-safe/" class="md-nav__link">
+      <a href="../autoware_default_adapi_universe/document/fail-safe/" class="md-nav__link">
         Fail-safe API
       </a>
     </li>
@@ -11392,7 +11392,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_default_adapi_universe/document/interface/" class="md-nav__link">
+      <a href="../autoware_default_adapi_universe/document/interface/" class="md-nav__link">
         Interface API
       </a>
     </li>
@@ -11406,7 +11406,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_default_adapi_universe/document/localization/" class="md-nav__link">
+      <a href="../autoware_default_adapi_universe/document/localization/" class="md-nav__link">
         Localization API
       </a>
     </li>
@@ -11420,7 +11420,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_default_adapi_universe/document/motion/" class="md-nav__link">
+      <a href="../autoware_default_adapi_universe/document/motion/" class="md-nav__link">
         Motion API
       </a>
     </li>
@@ -11434,7 +11434,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_default_adapi_universe/document/operation-mode/" class="md-nav__link">
+      <a href="../autoware_default_adapi_universe/document/operation-mode/" class="md-nav__link">
         Operation mode API
       </a>
     </li>
@@ -11448,7 +11448,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_default_adapi_universe/document/parameters/" class="md-nav__link">
+      <a href="../autoware_default_adapi_universe/document/parameters/" class="md-nav__link">
         Parameters
       </a>
     </li>
@@ -11462,7 +11462,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_default_adapi_universe/document/routing/" class="md-nav__link">
+      <a href="../autoware_default_adapi_universe/document/routing/" class="md-nav__link">
         Routing API
       </a>
     </li>
@@ -11514,7 +11514,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_diagnostic_graph_aggregator/">Autoware diagnostic graph aggregator</a>
+          <a href="../autoware_diagnostic_graph_aggregator/">Autoware diagnostic graph aggregator</a>
           
             <label for="__nav_11_9">
               <span class="md-nav__icon md-icon"></span>
@@ -11611,7 +11611,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_diagnostic_graph_aggregator/doc/format/graph/" class="md-nav__link">
+      <a href="../autoware_diagnostic_graph_aggregator/doc/format/graph/" class="md-nav__link">
         Graph
       </a>
     </li>
@@ -11625,7 +11625,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_diagnostic_graph_aggregator/doc/format/path/" class="md-nav__link">
+      <a href="../autoware_diagnostic_graph_aggregator/doc/format/path/" class="md-nav__link">
         Path
       </a>
     </li>
@@ -11639,7 +11639,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_diagnostic_graph_aggregator/doc/format/unit/" class="md-nav__link">
+      <a href="../autoware_diagnostic_graph_aggregator/doc/format/unit/" class="md-nav__link">
         Unit
       </a>
     </li>
@@ -11696,7 +11696,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_diagnostic_graph_aggregator/doc/format/unit/and/" class="md-nav__link">
+      <a href="../autoware_diagnostic_graph_aggregator/doc/format/unit/and/" class="md-nav__link">
         And
       </a>
     </li>
@@ -11710,7 +11710,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_diagnostic_graph_aggregator/doc/format/unit/const/" class="md-nav__link">
+      <a href="../autoware_diagnostic_graph_aggregator/doc/format/unit/const/" class="md-nav__link">
         Constant
       </a>
     </li>
@@ -11724,7 +11724,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_diagnostic_graph_aggregator/doc/format/unit/diag/" class="md-nav__link">
+      <a href="../autoware_diagnostic_graph_aggregator/doc/format/unit/diag/" class="md-nav__link">
         Diag
       </a>
     </li>
@@ -11738,7 +11738,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_diagnostic_graph_aggregator/doc/format/unit/link/" class="md-nav__link">
+      <a href="../autoware_diagnostic_graph_aggregator/doc/format/unit/link/" class="md-nav__link">
         Link
       </a>
     </li>
@@ -11752,7 +11752,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_diagnostic_graph_aggregator/doc/format/unit/or/" class="md-nav__link">
+      <a href="../autoware_diagnostic_graph_aggregator/doc/format/unit/or/" class="md-nav__link">
         Or
       </a>
     </li>
@@ -11766,7 +11766,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_diagnostic_graph_aggregator/doc/format/unit/remap/" class="md-nav__link">
+      <a href="../autoware_diagnostic_graph_aggregator/doc/format/unit/remap/" class="md-nav__link">
         Constant
       </a>
     </li>
@@ -11827,7 +11827,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_diagnostic_graph_aggregator/doc/tool/tree/" class="md-nav__link">
+      <a href="../autoware_diagnostic_graph_aggregator/doc/tool/tree/" class="md-nav__link">
         Tree tool
       </a>
     </li>
@@ -11886,7 +11886,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_diagnostic_graph_utils/">Autoware diagnostic graph utils</a>
+          <a href="../autoware_diagnostic_graph_utils/">Autoware diagnostic graph utils</a>
           
             <label for="__nav_11_10">
               <span class="md-nav__icon md-icon"></span>
@@ -11977,7 +11977,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_diagnostic_graph_utils/doc/node/converter/" class="md-nav__link">
+      <a href="../autoware_diagnostic_graph_utils/doc/node/converter/" class="md-nav__link">
         Converter tool
       </a>
     </li>
@@ -11991,7 +11991,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_diagnostic_graph_utils/doc/node/dump/" class="md-nav__link">
+      <a href="../autoware_diagnostic_graph_utils/doc/node/dump/" class="md-nav__link">
         Dump tool
       </a>
     </li>
@@ -12048,7 +12048,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_dummy_diag_publisher/">Autoware dummy diag publisher</a>
+          <a href="../autoware_dummy_diag_publisher/">Autoware dummy diag publisher</a>
           
         </div>
       
@@ -12096,7 +12096,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_dummy_infrastructure/">Autoware dummy infrastructure</a>
+          <a href="../autoware_dummy_infrastructure/">Autoware dummy infrastructure</a>
           
         </div>
       
@@ -12144,7 +12144,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_duplicated_node_checker/">Autoware duplicated node checker</a>
+          <a href="../autoware_duplicated_node_checker/">Autoware duplicated node checker</a>
           
         </div>
       
@@ -12192,7 +12192,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_mrm_comfortable_stop_operator/">Autoware mrm comfortable stop operator</a>
+          <a href="../autoware_mrm_comfortable_stop_operator/">Autoware mrm comfortable stop operator</a>
           
         </div>
       
@@ -12240,7 +12240,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_mrm_emergency_stop_operator/">Autoware mrm emergency stop operator</a>
+          <a href="../autoware_mrm_emergency_stop_operator/">Autoware mrm emergency stop operator</a>
           
         </div>
       
@@ -12288,7 +12288,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_mrm_handler/">Autoware mrm handler</a>
+          <a href="../autoware_mrm_handler/">Autoware mrm handler</a>
           
         </div>
       
@@ -12312,18 +12312,18 @@
               
   
   
+    
+  
   
     
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
       
       
       
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_17" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_17" checked>
       
       
         
@@ -12335,12 +12335,12 @@
       
         
         
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_pipeline_latency_monitor/">Autoware pipeline latency monitor</a>
+        <div class="md-nav__link md-nav__link--index md-nav__link--active">
+          <a href="./">Autoware pipeline latency monitor</a>
           
         </div>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_17_label" aria-expanded="false">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_17_label" aria-expanded="true">
         <label class="md-nav__title" for="__nav_11_17">
           <span class="md-nav__icon md-icon"></span>
           Autoware pipeline latency monitor
@@ -12384,7 +12384,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_processing_time_checker/">Autoware processing time checker</a>
+          <a href="../autoware_processing_time_checker/">Autoware processing time checker</a>
           
         </div>
       
@@ -12434,7 +12434,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_system_monitor/">Autoware system monitor</a>
+          <a href="../autoware_system_monitor/">Autoware system monitor</a>
           
             <label for="__nav_11_19">
               <span class="md-nav__icon md-icon"></span>
@@ -12516,7 +12516,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_system_monitor/docs/class_diagrams/" class="md-nav__link">
+      <a href="../autoware_system_monitor/docs/class_diagrams/" class="md-nav__link">
         Class diagrams
       </a>
     </li>
@@ -12530,7 +12530,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_system_monitor/docs/hdd_reader/" class="md-nav__link">
+      <a href="../autoware_system_monitor/docs/hdd_reader/" class="md-nav__link">
         hdd_reader
       </a>
     </li>
@@ -12544,7 +12544,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_system_monitor/docs/msr_reader/" class="md-nav__link">
+      <a href="../autoware_system_monitor/docs/msr_reader/" class="md-nav__link">
         msr_reader
       </a>
     </li>
@@ -12558,7 +12558,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_system_monitor/docs/ros_parameters/" class="md-nav__link">
+      <a href="../autoware_system_monitor/docs/ros_parameters/" class="md-nav__link">
         ROS parameters
       </a>
     </li>
@@ -12572,7 +12572,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_system_monitor/docs/seq_diagrams/" class="md-nav__link">
+      <a href="../autoware_system_monitor/docs/seq_diagrams/" class="md-nav__link">
         Sequence diagrams
       </a>
     </li>
@@ -12586,7 +12586,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_system_monitor/docs/topics_cpu_monitor/" class="md-nav__link">
+      <a href="../autoware_system_monitor/docs/topics_cpu_monitor/" class="md-nav__link">
         ROS topics: CPU Monitor
       </a>
     </li>
@@ -12600,7 +12600,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_system_monitor/docs/topics_gpu_monitor/" class="md-nav__link">
+      <a href="../autoware_system_monitor/docs/topics_gpu_monitor/" class="md-nav__link">
         ROS topics: GPU Monitor
       </a>
     </li>
@@ -12614,7 +12614,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_system_monitor/docs/topics_hdd_monitor/" class="md-nav__link">
+      <a href="../autoware_system_monitor/docs/topics_hdd_monitor/" class="md-nav__link">
         ROS topics: HDD Monitor
       </a>
     </li>
@@ -12628,7 +12628,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_system_monitor/docs/topics_mem_monitor/" class="md-nav__link">
+      <a href="../autoware_system_monitor/docs/topics_mem_monitor/" class="md-nav__link">
         ROS topics: Memory Monitor
       </a>
     </li>
@@ -12642,7 +12642,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_system_monitor/docs/topics_net_monitor/" class="md-nav__link">
+      <a href="../autoware_system_monitor/docs/topics_net_monitor/" class="md-nav__link">
         ROS topics: Net Monitor
       </a>
     </li>
@@ -12656,7 +12656,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_system_monitor/docs/topics_ntp_monitor/" class="md-nav__link">
+      <a href="../autoware_system_monitor/docs/topics_ntp_monitor/" class="md-nav__link">
         ROS topics: NTP Monitor
       </a>
     </li>
@@ -12670,7 +12670,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_system_monitor/docs/topics_process_monitor/" class="md-nav__link">
+      <a href="../autoware_system_monitor/docs/topics_process_monitor/" class="md-nav__link">
         ROS topics: Process Monitor
       </a>
     </li>
@@ -12684,7 +12684,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_system_monitor/docs/topics_voltage_monitor/" class="md-nav__link">
+      <a href="../autoware_system_monitor/docs/topics_voltage_monitor/" class="md-nav__link">
         ROS topics: Voltage Monitor
       </a>
     </li>
@@ -12698,7 +12698,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system/autoware_system_monitor/docs/traffic_reader/" class="md-nav__link">
+      <a href="../autoware_system_monitor/docs/traffic_reader/" class="md-nav__link">
         traffic_reader
       </a>
     </li>
@@ -12748,7 +12748,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_topic_relay_controller/">Autoware topic relay controller</a>
+          <a href="../autoware_topic_relay_controller/">Autoware topic relay controller</a>
           
         </div>
       
@@ -12796,7 +12796,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_topic_state_monitor/">Autoware topic state monitor</a>
+          <a href="../autoware_topic_state_monitor/">Autoware topic state monitor</a>
           
         </div>
       
@@ -12844,7 +12844,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../system/autoware_velodyne_monitor/">Autoware velodyne monitor</a>
+          <a href="../autoware_velodyne_monitor/">Autoware velodyne monitor</a>
           
         </div>
       
@@ -13883,26 +13883,6 @@
     Inner-workings / Algorithms
   </a>
   
-    <nav class="md-nav" aria-label="Inner-workings / Algorithms">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#data-association" class="md-nav__link">
-    Data association
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ekf-tracker" class="md-nav__link">
-    EKF Tracker
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -13937,106 +13917,11 @@
     Parameters
   </a>
   
-    <nav class="md-nav" aria-label="Parameters">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#input-channel-parameters" class="md-nav__link">
-    Input Channel parameters
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#core-parameters" class="md-nav__link">
-    Core Parameters
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
   <a href="#assumptions-known-limits" class="md-nav__link">
     Assumptions / Known limits
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#performance-benchmark-unit-testing" class="md-nav__link">
-    Performance Benchmark &amp; Unit Testing
-  </a>
-  
-    <nav class="md-nav" aria-label="Performance Benchmark & Unit Testing">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
-    Overview
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#how-to-run-locally" class="md-nav__link">
-    How to Run Locally
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rosbag-replay-visualization" class="md-nav__link">
-    Rosbag Replay &amp; Visualization
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#optional-error-detection-and-handling" class="md-nav__link">
-    (Optional) Error detection and handling
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#optional-performance-characterization" class="md-nav__link">
-    (Optional) Performance characterization
-  </a>
-  
-    <nav class="md-nav" aria-label="(Optional) Performance characterization">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#evaluation-of-mussp" class="md-nav__link">
-    Evaluation of muSSP
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#optional-referencesexternal-links" class="md-nav__link">
-    (Optional) References/External links
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#optional-future-extensions-unimplemented-parts" class="md-nav__link">
-    (Optional) Future extensions / Unimplemented parts
   </a>
   
 </li>
@@ -14059,83 +13944,39 @@
   
 
 
-<div><h1 id="multi_object_tracker">multi_object_tracker<a class="headerlink" href="#multi_object_tracker" title="Permanent link">#</a></h1>
+<div><h1 id="pipeline_latency_monitor">pipeline_latency_monitor<a class="headerlink" href="#pipeline_latency_monitor" title="Permanent link">#</a></h1>
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
-<p>The results of the detection are processed by a time series. The main purpose is to give ID and estimate velocity.</p>
+<p>This package provides a node for calculating the latency introduced by a sequence of Autoware processing steps. For example, the pipeline from receiving sensor data up to the generation of the control command is made of several steps (e.g., perception, prediction, planning, control). This node calculates the total end-to-end latency by subscribing to messages that report the processing time of each step, combining them based on their timestamps, and publishing the total latency.</p>
 <h2 id="inner-workings-algorithms">Inner-workings / Algorithms<a class="headerlink" href="#inner-workings-algorithms" title="Permanent link">#</a></h2>
-<p>This multi object tracker consists of data association and EKF.</p>
-<p><img alt="multi_object_tracker_overview" src="image/multi_object_tracker_overview.svg"></p>
-<h3 id="data-association">Data association<a class="headerlink" href="#data-association" title="Permanent link">#</a></h3>
-<p>The data association performs maximum score matching, called min cost max flow problem.
-In this package, mussp[1] is used as solver.
-In addition, when associating observations to tracers, data association have gates such as the area of the object from the BEV, Mahalanobis distance, and maximum distance, depending on the class label.</p>
-<h3 id="ekf-tracker">EKF Tracker<a class="headerlink" href="#ekf-tracker" title="Permanent link">#</a></h3>
-<p>Models for pedestrians, bicycles (motorcycles), cars and unknown are available.
-The pedestrian or bicycle tracker is running at the same time as the respective EKF model in order to enable the transition between pedestrian and bicycle tracking.
-For big vehicles such as trucks and buses, we have separate models for passenger cars and large vehicles because they are difficult to distinguish from passenger cars and are not stable. Therefore, separate models are prepared for passenger cars and big vehicles, and these models are run at the same time as the respective EKF models to ensure stability.</p>
+<p>The node is configured with a sequence of processing steps. For each step, it subscribes to a topic that publishes its execution latency.</p>
+<p>To calculate the total latency, the node works backward from the last step in the defined sequence. It takes the most recent latency measurement from the final step. Then, for each preceding step, it finds a corresponding latency measurement from its history whose timestamp is consistent with the subsequent step. Specifically, it ensures that the end time of a given step occurs before the start time of the next step in the chain.</p>
+<p>The total latency is the sum of these chronologically-consistent individual latencies. The node also allows for adding fixed offset values to the final sum.</p>
+<p>The calculated total latency is published continuously and also used to report diagnostic information. A WARN status is published if the latency exceeds a configurable threshold.</p>
 <h2 id="inputs-outputs">Inputs / Outputs<a class="headerlink" href="#inputs-outputs" title="Permanent link">#</a></h2>
 <h3 id="input">Input<a class="headerlink" href="#input" title="Permanent link">#</a></h3>
-<p>Multiple inputs are pre-defined in the input channel parameters (described below) and the inputs can be configured</p>
+<p>Subscribes to topics containing latency information for each processing step. The topic names and types are configured via parameters.
+Only 2 message types are currently supported.</p>
 <table>
 <thead>
 <tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
+<th>Message Type</th>
+<th>Timestamp field</th>
+<th>Latency value field</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>input/detection**/objects</code></td>
-<td><code>std::string</code></td>
-<td>input topic</td>
+<td><code>autoware_internal_debug_msgs/msg/Float64Stamped</code></td>
+<td><code>stamp</code></td>
+<td><code>data</code></td>
 </tr>
 <tr>
-<td><code>input/detection**/channel</code></td>
-<td><code>std::string</code></td>
-<td>input channel configuration</td>
+<td><code>autoware_planning_validator/msg/PlanningValidatorStatus</code></td>
+<td><code>stamp</code></td>
+<td><code>latency</code></td>
 </tr>
 </tbody>
 </table>
-<p>rule of the channel configuration</p>
-<ul>
-<li>'none' or empty : Indicates that this detection input channel is not used/disabled</li>
-<li>Any other string : Specifies a custom channel name to be used for the detection input, configured in <code>schema/input_channels.schema.json</code></li>
-</ul>
-<p>Up to 12 detection inputs can be configured (detection01 through detection12). Each input consists of an objects topic and its corresponding channel configuration.</p>
-<p>Example configurations:</p>
-<ul>
-<li>Single detection input:</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="nt">input/detection01/objects</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/perception/object_recognition/detection/objects</span>
-<span class="nt">input/detection01/channel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detected_objects</span><span class="w"> </span><span class="c1"># general input channel type</span>
-<span class="nt">input/detection02/objects</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">input/objects02</span>
-<span class="nt">input/detection02/channel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span><span class="w"> </span><span class="c1"># Disabled</span>
-</code></pre></div>
-<ul>
-<li>Multiple detection inputs:</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="c1"># lidar centerpoint</span>
-<span class="nt">input/detection01/objects</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/perception/object_recognition/detection/lidar_centerpoint/objects</span>
-<span class="nt">input/detection01/channel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lidar_centerpoint</span>
-
-<span class="c1"># camera lidar fusion</span>
-<span class="nt">input/detection02/objects</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/perception/object_recognition/detection/clustering/camera_lidar_fusion/objects</span>
-<span class="nt">input/detection02/channel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">camera_lidar_fusion</span>
-
-<span class="c1"># detection by tracker</span>
-<span class="nt">input/detection03/objects</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/perception/object_recognition/detection/detection_by_tracker/objects</span>
-<span class="nt">input/detection03/channel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detection_by_tracker</span>
-
-<span class="c1"># radar</span>
-<span class="nt">input/detection04/objects</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/perception/object_recognition/detection/radar/objects</span>
-<span class="nt">input/detection04/channel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">radar</span>
-
-<span class="c1"># disable</span>
-<span class="nt">input/detection05/objects</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">input/objects05</span>
-<span class="nt">input/detection05/channel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span><span class="w"> </span><span class="c1"># Disabled</span>
-</code></pre></div>
-<p>Up to 12 detection inputs can be configured (detection01 through detection12). Each input consists of an objects topic and its corresponding channel configuration.</p>
 <h3 id="output">Output<a class="headerlink" href="#output" title="Permanent link">#</a></h3>
 <table>
 <thead>
@@ -14147,542 +13988,100 @@ For big vehicles such as trucks and buses, we have separate models for passenger
 </thead>
 <tbody>
 <tr>
-<td><code>~/output</code></td>
-<td><code>autoware_perception_msgs::msg::TrackedObjects</code></td>
-<td>tracked objects</td>
+<td><code>~/output/total_latency_ms</code></td>
+<td><code>autoware_internal_debug_msgs/msg/Float64Stamped</code></td>
+<td>The calculated total pipeline latency in milliseconds.</td>
+</tr>
+<tr>
+<td><code>/diagnostics</code></td>
+<td><code>diagnostic_msgs/DiagnosticArray</code></td>
+<td>Publishes the diagnostic status. Reports <code>OK</code> if the latency is within the threshold, and <code>WARN</code> if it is exceeded.</td>
+</tr>
+<tr>
+<td><code>~/debug/&lt;step_name&gt;_latency_ms</code></td>
+<td><code>autoware_internal_debug_msgs/msg/Float64Stamped</code></td>
+<td>For each processing step, publishes the latest latency value received from its input topic.</td>
+</tr>
+<tr>
+<td><code>~/debug/pipeline_total_latency_ms</code></td>
+<td><code>autoware_internal_debug_msgs/msg/Float64Stamped</code></td>
+<td>A debug topic that also publishes the calculated total latency.</td>
 </tr>
 </tbody>
 </table>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">#</a></h2>
-<h3 id="input-channel-parameters">Input Channel parameters<a class="headerlink" href="#input-channel-parameters" title="Permanent link">#</a></h3>
 <table>
 <thead>
 <tr>
 <th>Name</th>
 <th>Type</th>
+<th>Default Value</th>
 <th>Description</th>
-<th>Default</th>
-<th>Range</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>flags.can_spawn_new_tracker</td>
-<td>boolean</td>
-<td>Indicates if the input channel can spawn new trackers.</td>
-<td>True</td>
-<td>N/A</td>
+<td><code>update_rate</code></td>
+<td><code>double</code></td>
+<td>10</td>
+<td>The rate [Hz] at which the total latency is calculated and published.</td>
 </tr>
 <tr>
-<td>flags.can_trust_existence_probability</td>
-<td>boolean</td>
-<td>Indicates if the input channel can trust the existence probability.</td>
-<td>True</td>
-<td>N/A</td>
+<td><code>latency_threshold_ms</code></td>
+<td><code>double</code></td>
+<td>1000</td>
+<td>The latency threshold in milliseconds. If the total latency exceeds this value, a <code>WARN</code> diagnostic is reported.</td>
 </tr>
 <tr>
-<td>flags.can_trust_extension</td>
-<td>boolean</td>
-<td>Indicates if the input channel can trust the object size(extension).</td>
-<td>True</td>
-<td>N/A</td>
+<td><code>window_size</code></td>
+<td><code>int</code></td>
+<td>10</td>
+<td>The number of historical latency messages to store for each processing step.</td>
 </tr>
 <tr>
-<td>flags.can_trust_classification</td>
-<td>boolean</td>
-<td>Indicates if the input channel can trust the object classification.</td>
-<td>True</td>
-<td>N/A</td>
+<td><code>processing_steps.sequence</code></td>
+<td><code>string[]</code></td>
+<td><code>[]</code></td>
+<td>An array of names defining the ordered sequence of processing steps to measure.</td>
 </tr>
 <tr>
-<td>flags.can_trust_orientation</td>
-<td>boolean</td>
-<td>Indicates if the input channel can trust the object orientation.</td>
-<td>True</td>
-<td>N/A</td>
+<td><code>processing_steps.&lt;step_name&gt;.topic</code></td>
+<td><code>string</code></td>
+<td>-</td>
+<td>The input topic that provides the latency for this step.</td>
 </tr>
 <tr>
-<td>optional.name</td>
-<td>string</td>
-<td>The name of the input channel.</td>
-<td>detected_objects</td>
-<td>N/A</td>
+<td><code>processing_steps.&lt;step_name&gt;.topic_type</code></td>
+<td><code>string</code></td>
+<td>-</td>
+<td>The message type of the input topic. Supported types: <code>autoware_internal_debug_msgs/msg/Float64Stamped</code>, <code>autoware_planning_validator/msg/PlanningValidatorStatus</code>.</td>
 </tr>
 <tr>
-<td>optional.short_name</td>
-<td>string</td>
-<td>The short name of the input channel.</td>
-<td>all</td>
-<td>N/A</td>
-</tr>
-</tbody>
-</table>
-<h3 id="core-parameters">Core Parameters<a class="headerlink" href="#core-parameters" title="Permanent link">#</a></h3>
-<ul>
-<li>Node</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-<th>Range</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>car_tracker</td>
-<td>string</td>
-<td>Tracker model for car class.</td>
-<td>multi_vehicle_tracker</td>
-<td>N/A</td>
+<td><code>processing_steps.&lt;step_name&gt;.timestamp_meaning</code></td>
+<td><code>string</code></td>
+<td><code>"end"</code></td>
+<td>Defines if the timestamp in the message represents the <code>start</code> or <code>end</code> of the processing interval for that step.</td>
 </tr>
 <tr>
-<td>truck_tracker</td>
-<td>string</td>
-<td>Tracker model for truck class.</td>
-<td>multi_vehicle_tracker</td>
-<td>N/A</td>
+<td><code>processing_steps.&lt;step_name&gt;.latency_multiplier</code></td>
+<td><code>double</code></td>
+<td><code>1.0</code></td>
+<td>A multiplier to convert the received latency value into milliseconds (e.g., use 1000.0 if the input is in seconds).</td>
 </tr>
 <tr>
-<td>bus_tracker</td>
-<td>string</td>
-<td>Tracker model for bus class.</td>
-<td>multi_vehicle_tracker</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>trailer_tracker</td>
-<td>string</td>
-<td>Tracker model for trailer class.</td>
-<td>multi_vehicle_tracker</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>pedestrian_tracker</td>
-<td>string</td>
-<td>Tracker model for pedestrian class.</td>
-<td>pedestrian_and_bicycle_tracker</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>bicycle_tracker</td>
-<td>string</td>
-<td>Tracker model for bicycle class.</td>
-<td>pedestrian_and_bicycle_tracker</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>motorcycle_tracker</td>
-<td>string</td>
-<td>Tracker model for motorcycle class.</td>
-<td>pedestrian_and_bicycle_tracker</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>publish_rate</td>
-<td>float</td>
-<td>Timer frequency to output with delay compensation.</td>
-<td>10.0</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>world_frame_id</td>
-<td>string</td>
-<td>Object kinematics definition frame.</td>
-<td>map</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>ego_frame_id</td>
-<td>string</td>
-<td>Vehicle's ego frame.</td>
-<td>base_link</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>enable_delay_compensation</td>
-<td>boolean</td>
-<td>If True, tracker use timers to schedule publishers and use prediction step to extrapolate object state at desired timestamp.</td>
-<td>False</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>consider_odometry_uncertainty</td>
-<td>boolean</td>
-<td>If True, consider odometry uncertainty in tracking.</td>
-<td>False</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>enable_unknown_object_velocity_estimation</td>
-<td>boolean</td>
-<td>If True, enable velocity estimation for unknown objects.</td>
-<td>True</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>enable_unknown_object_motion_output</td>
-<td>boolean</td>
-<td>If True, export unknown object velocity.</td>
-<td>False</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>tracker_lifetime</td>
-<td>float</td>
-<td>Lifetime of the tracker in seconds.</td>
-<td>1.0</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>min_known_object_removal_iou</td>
-<td>float</td>
-<td>Minimum IOU between associated objects with known label to remove younger tracker</td>
-<td>0.1</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>min_unknown_object_removal_iou</td>
-<td>float</td>
-<td>Minimum IOU between associated objects with unknown label to remove unknown tracker</td>
-<td>0.001</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>confident_count_threshold.UNKNOWN</td>
-<td>float</td>
-<td>Number of measurements to consider tracker as confident for unknown object classes.</td>
-<td>3</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>confident_count_threshold.CAR</td>
-<td>float</td>
-<td>Number of measurements to consider tracker as confident for car object classes.</td>
-<td>3</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>confident_count_threshold.TRUCK</td>
-<td>float</td>
-<td>Number of measurements to consider tracker as confident for truck object classes.</td>
-<td>3</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>confident_count_threshold.BUS</td>
-<td>float</td>
-<td>Number of measurements to consider tracker as confident for bus object classes.</td>
-<td>3</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>confident_count_threshold.TRAILER</td>
-<td>float</td>
-<td>Number of measurements to consider tracker as confident for trailer object classes.</td>
-<td>3</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>confident_count_threshold.MOTORBIKE</td>
-<td>float</td>
-<td>Number of measurements to consider tracker as confident for motorbike object classes.</td>
-<td>3</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>confident_count_threshold.BICYCLE</td>
-<td>float</td>
-<td>Number of measurements to consider tracker as confident for bicycle object classes.</td>
-<td>3</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>confident_count_threshold.PEDESTRIAN</td>
-<td>float</td>
-<td>Number of measurements to consider tracker as confident for pedestrian object classes.</td>
-<td>3</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>generalized_iou_thresholds</td>
-<td>array</td>
-<td>Generalized IoU threshold for each class.</td>
-<td>[-0.3, -0.4, -0.6, -0.6, -0.6, -0.1, -0.1, -0.1]</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>overlap_distance_thresholds</td>
-<td>array</td>
-<td>Overlap distance threshold for each class.</td>
-<td>[9.0, 5.0, 9.0, 9.0, 9.0, 4.0, 3.0, 2.0]</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>publish_processing_time</td>
-<td>boolean</td>
-<td>Enable to publish debug message of process time information.</td>
-<td>False</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>publish_processing_time_detail</td>
-<td>boolean</td>
-<td>Enable to publish debug message of detailed process time information.</td>
-<td>False</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>publish_tentative_objects</td>
-<td>boolean</td>
-<td>Enable to publish tentative tracked objects, which have lower confidence.</td>
-<td>False</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>publish_debug_markers</td>
-<td>boolean</td>
-<td>Enable to publish debug markers, which indicates association of multi-inputs, existence probability of each detection.</td>
-<td>False</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>diagnostics_warn_delay</td>
-<td>float</td>
-<td>Delay threshold for warning diagnostics in seconds.</td>
-<td>0.5</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>diagnostics_error_delay</td>
-<td>float</td>
-<td>Delay threshold for error diagnostics in seconds.</td>
-<td>1.0</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>diagnostics_warn_extrapolation</td>
-<td>float</td>
-<td>Delay extrapolation threshold for warning diagnostics in seconds.</td>
-<td>0.5</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>diagnostics_error_extrapolation</td>
-<td>float</td>
-<td>Delay extrapolation threshold for error diagnostics in seconds.</td>
-<td>1.0</td>
-<td>N/A</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>Association</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-<th>Range</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>can_assign_matrix</td>
-<td>array</td>
-<td>Assignment table for data association.</td>
-<td>[1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1]</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>max_dist_matrix</td>
-<td>array</td>
-<td>Maximum distance table for data association.</td>
-<td>[4.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 4.0, 2.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 4.0, 2.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 4.0, 2.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 4.0, 2.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 3.0, 1.0, 1.0, 1.0, 1.0, 3.0, 3.0, 2.0, 3.0, 1.0, 1.0, 1.0, 1.0, 3.0, 3.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 3.0, 3.0, 2.0]</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>max_area_matrix</td>
-<td>array</td>
-<td>Maximum area table for data association.</td>
-<td>[100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 12.1, 12.1, 36.0, 60.0, 60.0, 10000.0, 10000.0, 10000.0, 36.0, 12.1, 36.0, 60.0, 60.0, 10000.0, 10000.0, 10000.0, 60.0, 12.1, 36.0, 60.0, 60.0, 10000.0, 10000.0, 10000.0, 60.0, 12.1, 36.0, 60.0, 60.0, 10000.0, 10000.0, 10000.0, 2.5, 10000.0, 10000.0, 10000.0, 10000.0, 2.5, 2.5, 1.0, 2.5, 10000.0, 10000.0, 10000.0, 10000.0, 2.5, 2.5, 1.0, 2.0, 10000.0, 10000.0, 10000.0, 10000.0, 1.5, 1.5, 1.0]</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>min_area_matrix</td>
-<td>array</td>
-<td>Minimum area table for data association.</td>
-<td>[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.6, 3.6, 6.0, 10.0, 10.0, 0.0, 0.0, 0.0, 6.0, 3.6, 6.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 3.6, 6.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 3.6, 6.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.001, 0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1, 0.001, 0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1, 0.001, 0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1]</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>max_rad_matrix</td>
-<td>array</td>
-<td>Maximum angle table for data association.</td>
-<td>[3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15]</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>min_iou_matrix</td>
-<td>array</td>
-<td>A matrix that represents the minimum Intersection over Union (IoU) limit allowed for assignment.</td>
-<td>[0.0001, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.2, 0.2, 0.2, 0.1, 0.1, 0.1, 0.1, 0.2, 0.3, 0.3, 0.3, 0.1, 0.1, 0.1, 0.1, 0.2, 0.3, 0.3, 0.3, 0.1, 0.1, 0.1, 0.1, 0.2, 0.3, 0.3, 0.3, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0001]</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>unknown_association_giou_threshold</td>
-<td>float</td>
-<td>GIoU threshold for unknown-unknown association.</td>
-<td>-0.8</td>
-<td>N/A</td>
-</tr>
-</tbody>
-</table>
-<h4 id="simulation-parameters">Simulation parameters<a class="headerlink" href="#simulation-parameters" title="Permanent link">#</a></h4>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-<th>Range</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>car_tracker</td>
-<td>string</td>
-<td>Tracker model for car class.</td>
-<td>pass_through_tracker</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>truck_tracker</td>
-<td>string</td>
-<td>Tracker model for truck class.</td>
-<td>pass_through_tracker</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>bus_tracker</td>
-<td>string</td>
-<td>Tracker model for bus class.</td>
-<td>pass_through_tracker</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>pedestrian_tracker</td>
-<td>string</td>
-<td>Tracker model for pedestrian class.</td>
-<td>pass_through_tracker</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>bicycle_tracker</td>
-<td>string</td>
-<td>Tracker model for bicycle class.</td>
-<td>pass_through_tracker</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>motorcycle_tracker</td>
-<td>string</td>
-<td>Tracker model for motorcycle class.</td>
-<td>pass_through_tracker</td>
-<td>N/A</td>
+<td><code>latency_offsets_ms</code></td>
+<td><code>double[]</code></td>
+<td><code>[]</code></td>
+<td>A list of fixed latency values (in milliseconds) to be added to the calculated total latency. Useful for accounting for steps that do not publish their own latency.</td>
 </tr>
 </tbody>
 </table>
 <h2 id="assumptions-known-limits">Assumptions / Known limits<a class="headerlink" href="#assumptions-known-limits" title="Permanent link">#</a></h2>
-<p>See the <a href="models/">model explanations</a>.</p>
-<h2 id="performance-benchmark-unit-testing">Performance Benchmark &amp; Unit Testing<a class="headerlink" href="#performance-benchmark-unit-testing" title="Permanent link">#</a></h2>
-<h3 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">#</a></h3>
-<p>Unit tests and benchmarks are included to evaluate tracker performance under varying detection loads and object types.</p>
-<h3 id="how-to-run-locally">How to Run Locally<a class="headerlink" href="#how-to-run-locally" title="Permanent link">#</a></h3>
-<h4 id="1-build-with-tests">1. Build with Tests<a class="headerlink" href="#1-build-with-tests" title="Permanent link">#</a></h4>
-<div class="highlight"><pre><span></span><code>colcon<span class="w"> </span>build<span class="w"> </span>--packages-select<span class="w"> </span>autoware_multi_object_tracker<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--cmake-args<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>RelWithDebInfo
-</code></pre></div>
-<h4 id="2-run-the-performance-benchmark">2. Run the Performance Benchmark<a class="headerlink" href="#2-run-the-performance-benchmark" title="Permanent link">#</a></h4>
-<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>install/setup.bash
-./build/autoware_multi_object_tracker/test_multi_object_tracker
-</code></pre></div>
-<p>This runs the default test (<code>runPerformanceTest</code>) and outputs timing data.</p>
-<h4 id="3-enable-optional-profiling-modes-manual">3. Enable Optional Profiling Modes (Manual)<a class="headerlink" href="#3-enable-optional-profiling-modes-manual" title="Permanent link">#</a></h4>
-<p>To evaluate scalability with object count:</p>
 <ul>
-<li>Manually enable the following functions in the test source:<ul>
-<li><code>profilePerformanceVsCarCount()</code></li>
-<li><code>profilePerformanceVsPedestrianCount()</code></li>
-</ul>
-</li>
-</ul>
-<p>These run additional profiling scenarios.</p>
-<h3 id="rosbag-replay-visualization">Rosbag Replay &amp; Visualization<a class="headerlink" href="#rosbag-replay-visualization" title="Permanent link">#</a></h3>
-<h4 id="simulated-rosbag-output">Simulated Rosbag Output<a class="headerlink" href="#simulated-rosbag-output" title="Permanent link">#</a></h4>
-<p>To record benchmark results for visualization in RViz:</p>
-<ol>
-<li>Enable <code>write_bag = true</code> in <code>runIterations()</code></li>
-<li>Run the test; the output <code>.db3</code> path is printed</li>
-<li>Visualize:</li>
-</ol>
-<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>bag<span class="w"> </span>play<span class="w"> </span>&lt;output_file&gt;.db3
-rviz2<span class="w"> </span>-d<span class="w"> </span>&lt;your_rviz_config&gt;.rviz
-</code></pre></div>
-<h4 id="real-rosbag-input">Real Rosbag Input<a class="headerlink" href="#real-rosbag-input" title="Permanent link">#</a></h4>
-<ol>
-<li>Set the path in <code>runPerformanceTestWithRosbag()</code> to a real <code>.db3</code> file</li>
-<li>Run the test</li>
-<li>Visualize the tracking result in RViz</li>
-</ol>
-<h2 id="optional-error-detection-and-handling">(Optional) Error detection and handling<a class="headerlink" href="#optional-error-detection-and-handling" title="Permanent link">#</a></h2>
-<!-- Write how to detect errors and how to recover from them.
-
-Example:
-  This package can handle up to 20 obstacles. If more obstacles found, this node will give up and raise diagnostic errors.
--->
-
-<h2 id="optional-performance-characterization">(Optional) Performance characterization<a class="headerlink" href="#optional-performance-characterization" title="Permanent link">#</a></h2>
-<h3 id="evaluation-of-mussp">Evaluation of muSSP<a class="headerlink" href="#evaluation-of-mussp" title="Permanent link">#</a></h3>
-<p>According to our evaluation, muSSP is faster than normal <a href="lib/association/successive_shortest_path">SSP</a> when the matrix size is more than 100.</p>
-<p>Execution time for varying matrix size at 95% sparsity. In real data, the sparsity was often around 95%.
-<img alt="mussp_evaluation1" src="image/mussp_evaluation1.png"></p>
-<p>Execution time for varying the sparsity with matrix size 100.
-<img alt="mussp_evaluation2" src="image/mussp_evaluation2.png"></p>
-<h2 id="optional-referencesexternal-links">(Optional) References/External links<a class="headerlink" href="#optional-referencesexternal-links" title="Permanent link">#</a></h2>
-<p>This package makes use of external code.</p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>License</th>
-<th>Original Repository</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="lib/association/mu_successive_shortest_path">muSSP</a></td>
-<td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache-2.0</a></td>
-<td><a href="https://github.com/yu-lab-vt/muSSP">https://github.com/yu-lab-vt/muSSP</a></td>
-</tr>
-</tbody>
-</table>
-<p>[1] C. Wang, Y. Wang, Y. Wang, C.-t. Wu, and G. Yu, "muSSP: Efficient
-Min-cost Flow Algorithm for Multi-object Tracking," NeurIPS, 2019</p>
-<h2 id="optional-future-extensions-unimplemented-parts">(Optional) Future extensions / Unimplemented parts<a class="headerlink" href="#optional-future-extensions-unimplemented-parts" title="Permanent link">#</a></h2>
-<!-- Write future extensions of this package.
-
-Example:
-  Currently, this package can't handle the chattering obstacles well. We plan to add some probabilistic filters in the perception layer to improve it.
-  Also, there are some parameters that should be global(e.g. vehicle size, max steering, etc.). These will be refactored and defined as global parameters so that we can share the same parameters between different nodes.
---></div>
+<li>The accuracy of the latency calculation depends on the timestamps of all input messages being synchronized to a common clock.</li>
+<li>The algorithm for combining latencies assumes a sequential, non-parallel processing pipeline.</li>
+<li>The node must be configured with the correct sequence of processing steps and their corresponding topics for the calculation to be meaningful.</li>
+</ul></div>
 
 
 
@@ -14709,7 +14108,7 @@ Example:
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../autoware_map_based_prediction/" class="md-footer__link md-footer__link--prev" aria-label="Previous: map_based_prediction" rel="prev">
+          <a href="../autoware_mrm_handler/" class="md-footer__link md-footer__link--prev" aria-label="Previous: mrm_handler" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -14718,20 +14117,20 @@ Example:
                 Previous
               </span>
               <div class="md-ellipsis">
-                map_based_prediction
+                mrm_handler
               </div>
             </div>
           </a>
         
         
           
-          <a href="models/" class="md-footer__link md-footer__link--next" aria-label="Next: Models used in this module" rel="next">
+          <a href="../autoware_processing_time_checker/" class="md-footer__link md-footer__link--next" aria-label="Next: Processing Time Checker" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Models used in this module
+                Processing Time Checker
               </div>
             </div>
             <div class="md-footer__button md-icon">
