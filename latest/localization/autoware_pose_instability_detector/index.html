@@ -9229,6 +9229,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_8_10_5" id="__nav_8_10_5_label" tabindex="0">
@@ -9251,6 +9253,20 @@
     <li class="md-nav__item">
       <a href="../../planning/planning_validator/autoware_planning_validator" class="md-nav__link">
         About Planning Validator
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../planning/planning_validator/autoware_planning_validator_trajectory_checker" class="md-nav__link">
+        Trajectory Checker
       </a>
     </li>
   
@@ -14038,8 +14054,8 @@
 <p>The results of this comparison are then output to the <code>/diagnostics</code> topic.</p>
 <p><img alt="overview" src="media/pose_instability_detector_overview.png"></p>
 <p><img alt="rqt_runtime_monitor" src="media/rqt_runtime_monitor.png"></p>
-<p>If this node outputs WARN messages to <code>/diagnostics</code>, it means that the EKF output is significantly different from the integrated twist values.
-In other words, WARN outputs indicate that the vehicle has moved to a place outside the expected range based on the twist values.
+<p>If this node outputs ERROR messages to <code>/diagnostics</code>, it means that the EKF output is significantly different from the integrated twist values.
+In other words, ERROR outputs indicate that the vehicle has moved to a place outside the expected range based on the twist values.
 This discrepancy suggests that there may be an issue with either the estimated pose or the input twist.</p>
 <p>The following diagram provides an overview of how the procedure looks like:</p>
 <p><img alt="procedure" src="media/pose_instabilty_detector_procedure.svg"></p>
