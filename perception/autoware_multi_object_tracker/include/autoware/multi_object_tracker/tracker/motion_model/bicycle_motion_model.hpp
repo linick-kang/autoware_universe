@@ -100,7 +100,19 @@ public:
     const double & x, const double & y, const double & yaw, const std::array<double, 36> & pose_cov,
     const double & vel, const std::array<double, 36> & twist_cov);
 
+<<<<<<< HEAD
   bool adjustPosition(const double & x, const double & y);
+=======
+  bool updateStatePoseRear(
+    const double & xr, const double & yr, const std::array<double, 36> & pose_cov);
+
+  bool updateStatePoseFront(
+    const double & xf, const double & yf, const std::array<double, 36> & pose_cov);
+
+  bool updateStateLength(const double & new_length);
+
+  bool adjustPosition(const double & delta_x, const double & delta_y);
+>>>>>>> 32829fd7b0 (feat: change EMA class to only smooth boundingbox and keep other shape type untouched)
 
   bool limitStates();
 
