@@ -349,27 +349,26 @@ bool BicycleMotionModel::updateStateLength(const double & new_length)
   const double cos_yaw = std::cos(current_yaw);
   const double sin_yaw = std::sin(current_yaw);
 
-  // Calculate new wheel positions directly from current rear wheel position
-  // Rear wheel moves by the difference in lr distances
+  // Compute vehicle position (anchor) from rear wheel
   const double current_length = getLength();
   const double lr_current = current_length * motion_params_.lr_ratio;
+  const double x_vehicle = X_t(IDX::X1) + lr_current * cos_yaw;
+  const double y_vehicle = X_t(IDX::Y1) + lr_current * sin_yaw;
+
+  // Compute new wheel positions from vehicle position and new length
   const double lr_new = new_length * motion_params_.lr_ratio;
-  const double lr_delta = lr_new - lr_current;
+  const double lf_new = new_length * motion_params_.lf_ratio;
 
-  const double new_x1 = X_t(IDX::X1) - lr_delta * cos_yaw;
-  const double new_y1 = X_t(IDX::Y1) - lr_delta * sin_yaw;
-
-  // Front wheel position based on new wheelbase from new rear wheel position
-  const double new_wheelbase = new_length * (motion_params_.lf_ratio + motion_params_.lr_ratio);
-  const double new_x2 = new_x1 + new_wheelbase * cos_yaw;
-  const double new_y2 = new_y1 + new_wheelbase * sin_yaw;
+  const double new_x1 = x_vehicle - lr_new * cos_yaw;
+  const double new_y1 = y_vehicle - lr_new * sin_yaw;
+  const double new_x2 = x_vehicle + lf_new * cos_yaw;
+  const double new_y2 = y_vehicle + lf_new * sin_yaw;
 
   // Update state with new wheel positions, keeping velocities unchanged
   X_t(IDX::X1) = new_x1;
   X_t(IDX::Y1) = new_y1;
   X_t(IDX::X2) = new_x2;
   X_t(IDX::Y2) = new_y2;
-  // Keep velocities (U, V) unchanged
 
   // Reinitialize with updated state (no covariance change)
   ekf_.init(X_t, P_t);

@@ -71,7 +71,7 @@ private:
   // EMA/ema below are abbreviation for exponential moving average
   static constexpr double EMA_ALPHA_WEAK = 0.05;
   static constexpr double EMA_ALPHA_STRONG = 0.2;
-  static constexpr double SHAPE_VARIATION_THRESHOLD = 0.2;
+  static constexpr double SHAPE_VARIATION_THRESHOLD = 0.1;
   static constexpr size_t STABLE_STREAK_THRESHOLD = 4;
 
   ExponentialMovingAverageShape ema_shape_{
@@ -101,7 +101,8 @@ public:
   // object update
   bool updateWithMeasurement(
     const types::DynamicObject & object, const rclcpp::Time & measurement_time,
-    const types::InputChannel & channel_info, bool significant_shape_change = false);
+    const types::InputChannel & channel_info, bool significant_shape_change,
+    const std::optional<geometry_msgs::msg::Pose> & ego_pose);
   bool updateWithoutMeasurement(const rclcpp::Time & now);
   void updateClassification(
     const std::vector<autoware_perception_msgs::msg::ObjectClassification> & classification);
@@ -202,13 +203,17 @@ protected:
   virtual bool conditionedUpdate(
     const types::DynamicObject & measurement, const types::DynamicObject & prediction,
     const autoware_perception_msgs::msg::Shape & smoothed_shape,
-    const rclcpp::Time & measurement_time, const types::InputChannel & channel_info);
+    const rclcpp::Time & measurement_time, const types::InputChannel & channel_info,
+    std::string & update_strategy, bool is_debug_target = false);
 
 public:
   virtual bool getTrackedObject(
     const rclcpp::Time & time, types::DynamicObject & object,
     const bool to_publish = false) const = 0;
   virtual bool predict(const rclcpp::Time & time) = 0;
+
+  // Debug-only: get current tracked object without modifying state
+  virtual const types::DynamicObject & getTrackedObjectDebug() const { return object_; }
 };
 
 }  // namespace autoware::multi_object_tracker

@@ -65,7 +65,11 @@ public:
   bool conditionedUpdate(
     const types::DynamicObject & measurement, const types::DynamicObject & prediction,
     const autoware_perception_msgs::msg::Shape & smoothed_shape,
-    const rclcpp::Time & measurement_time, const types::InputChannel & channel_info) override;
+    const rclcpp::Time & measurement_time, const types::InputChannel & channel_info,
+    std::string & update_strategy, bool is_debug_target = false) override;
+
+  // Debug-only: get current tracked object without modifying state
+  const types::DynamicObject & getTrackedObjectDebug() const { return object_; }
 
   bool getTrackedObject(
     const rclcpp::Time & time, types::DynamicObject & object,

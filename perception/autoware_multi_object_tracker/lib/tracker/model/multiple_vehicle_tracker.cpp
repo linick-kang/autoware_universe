@@ -48,6 +48,28 @@ bool MultipleVehicleTracker::measure(
   return true;
 }
 
+bool MultipleVehicleTracker::conditionedUpdate(
+  const types::DynamicObject & measurement, const types::DynamicObject & prediction,
+  const autoware_perception_msgs::msg::Shape & smoothed_shape,
+  const rclcpp::Time & measurement_time, const types::InputChannel & channel_info,
+  std::string & update_strategy, bool is_debug_target)
+{
+  normal_vehicle_tracker_.conditionedUpdate(
+    measurement, prediction, smoothed_shape, measurement_time, channel_info, update_strategy,
+    is_debug_target);
+  big_vehicle_tracker_.conditionedUpdate(
+    measurement, prediction, smoothed_shape, measurement_time, channel_info, update_strategy,
+    is_debug_target);
+
+  return true;
+}
+
+void MultipleVehicleTracker::setObjectShape(const autoware_perception_msgs::msg::Shape & shape)
+{
+  normal_vehicle_tracker_.setObjectShape(shape);
+  big_vehicle_tracker_.setObjectShape(shape);
+}
+
 bool MultipleVehicleTracker::getTrackedObject(
   const rclcpp::Time & time, types::DynamicObject & object,
   [[maybe_unused]] const bool to_publish) const
