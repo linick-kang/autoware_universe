@@ -53,7 +53,7 @@ public:
   autoware_perception_msgs::msg::Shape getShape() const;
 
   void processNoisyMeasurement(const types::DynamicObject & measurement);
-  void notifyNormalMeasurement();
+  void processNormalMeasurement(const types::DynamicObject & measurement);
 };
 
 }  // namespace autoware::multi_object_tracker

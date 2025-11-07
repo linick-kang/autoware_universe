@@ -62,11 +62,10 @@ void ExponentialMovingAverageShape::clear()
 void ExponentialMovingAverageShape::processNoisyMeasurement(
   const types::DynamicObject & measurement)
 {
-  // Store the latest shape
-  latest_shape_ = measurement.shape;
-
   // Apply EMA smoothing for BOUNDING_BOX
   if (measurement.shape.type != autoware_perception_msgs::msg::Shape::BOUNDING_BOX) {
+    stable_ = false;
+    latest_shape_ = measurement.shape;
     return;
   }
 
@@ -107,8 +106,11 @@ void ExponentialMovingAverageShape::processNoisyMeasurement(
   }
 }
 
-void ExponentialMovingAverageShape::notifyNormalMeasurement()
+void ExponentialMovingAverageShape::processNormalMeasurement(
+  const types::DynamicObject & measurement)
 {
+  latest_shape_ = measurement.shape;
+
   // Normal measurement interrupts the noisy sequence
   ++normal_frame_interruptions_;
 
@@ -122,10 +124,8 @@ void ExponentialMovingAverageShape::notifyNormalMeasurement()
 
 autoware_perception_msgs::msg::Shape ExponentialMovingAverageShape::getShape() const
 {
-  // For non-BOUNDING_BOX types, return the latest shape as-is (no smoothing)
-  if (latest_shape_.type != autoware_perception_msgs::msg::Shape::BOUNDING_BOX) {
-    return latest_shape_;
-  }
+  // if not stable, return the latest shape as-is (no smoothing)
+  if (!stable_) return latest_shape_;
 
   // For BOUNDING_BOX type, return smoothed dimensions
   autoware_perception_msgs::msg::Shape shape;

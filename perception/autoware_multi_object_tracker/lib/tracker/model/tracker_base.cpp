@@ -467,8 +467,8 @@ bool Tracker::updateWithMeasurement(
       update_details = "No significant shape change detected";
     }
 
-    // Notify EMA that this is a normal measurement (resets consecutive noisy counter)
-    ema_shape_.notifyNormalMeasurement();
+    // Input normal measurement for EMA
+    ema_shape_.processNormalMeasurement(object);
 
     // Store state before measure for debug logging
     types::DynamicObject before_measure_state;
@@ -514,13 +514,14 @@ bool Tracker::updateWithMeasurement(
       // Renew ema_shape_
       ema_shape_.clear();
     } else {
+      const auto current_shape = object_.shape;
+
       if (is_debug_object) {
         update_method = "CONDITIONED_UPDATE";
-        auto smoothed_shape = ema_shape_.getShape();
         std::stringstream ss;
-        ss << "EMA not stable, using conditioned update with smoothed dims(" << std::fixed
-           << std::setprecision(3) << smoothed_shape.dimensions.x << ", "
-           << smoothed_shape.dimensions.y << ", " << smoothed_shape.dimensions.z << ")";
+        ss << "EMA not stable, using conditioned update with current dims(" << std::fixed
+           << std::setprecision(3) << current_shape.dimensions.x << ", "
+           << current_shape.dimensions.y << ", " << current_shape.dimensions.z << ")";
         update_details = ss.str();
       }
 
@@ -528,12 +529,10 @@ bool Tracker::updateWithMeasurement(
       types::DynamicObject predicted_object;
       getTrackedObject(measurement_time, predicted_object);
 
-      const auto smoothed_shape = ema_shape_.getShape();
-
       // Perform conditioned update and capture strategy
       std::string update_strategy = "NORMAL_UPDATE";
       conditionedUpdate(
-        object, predicted_object, smoothed_shape, measurement_time, channel_info, update_strategy,
+        object, predicted_object, current_shape, measurement_time, channel_info, update_strategy,
         is_debug_object);
 
       if (is_debug_object) {
@@ -589,7 +588,7 @@ bool Tracker::createPseudoMeasurement(
   const double dy = meas.pose.position.y - pred.pose.position.y;
   const double dist2 = dx * dx + dy * dy;
   constexpr double d_max_square_inv = 1 / 2.0;  // saturate when distance overs 1.414 m
-  constexpr double min_w = 0.05;
+  constexpr double min_w = 0.0;
   const double w_pose = std::clamp(1.0 - dist2 * d_max_square_inv, min_w, 1.0);
 
   // Blend position

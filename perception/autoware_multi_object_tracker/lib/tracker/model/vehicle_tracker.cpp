@@ -427,7 +427,7 @@ bool VehicleTracker::conditionedUpdate(
 
 WheelInfo VehicleTracker::estimateUpdateWheel(
   const types::DynamicObject & measurement, const types::DynamicObject & prediction,
-  const autoware_perception_msgs::msg::Shape & smoothed_shape) const
+  [[maybe_unused]] const autoware_perception_msgs::msg::Shape & smoothed_shape) const
 {
   WheelInfo wheel_info;
 
@@ -443,7 +443,10 @@ WheelInfo VehicleTracker::estimateUpdateWheel(
   // Get dimensions
   const double measured_length = measurement.shape.dimensions.x;
   const double predicted_length = prediction.shape.dimensions.x;
-  const double smoothed_length = smoothed_shape.dimensions.x;
+
+  // FIX 3: For wheel position calculations, use predicted length to prevent
+  // noisy measurements from stretching geometry during conditioned updates
+  const double length_for_wheel_calc = predicted_length;
 
   // Calculate edge center points in world coordinates
   const double measured_half_length = measured_length * 0.5;
@@ -496,9 +499,10 @@ WheelInfo VehicleTracker::estimateUpdateWheel(
     const double wheel_min_dist =
       use_front_wheel ? bicycle_state.wheel_pos_front_min : bicycle_state.wheel_pos_rear_min;
 
-    // Calculate wheel offset from edge (not center) using smoothed length
+    // Calculate wheel offset from edge (not center) using predicted length (not noisy smoothed)
     const double edge_to_wheel_offset = std::max(
-      smoothed_length * (0.5 - wheel_offset_ratio), wheel_min_dist - smoothed_length * 0.5);
+      length_for_wheel_calc * (0.5 - wheel_offset_ratio),
+      wheel_min_dist - length_for_wheel_calc * 0.5);
 
     // Calculate wheel position from selected edge center (use measurement yaw for wheel offset)
     if (use_front_wheel) {
