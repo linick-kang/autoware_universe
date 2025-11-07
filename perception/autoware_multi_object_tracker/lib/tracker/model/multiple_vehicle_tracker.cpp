@@ -52,14 +52,12 @@ bool MultipleVehicleTracker::conditionedUpdate(
   const types::DynamicObject & measurement, const types::DynamicObject & prediction,
   const autoware_perception_msgs::msg::Shape & smoothed_shape,
   const rclcpp::Time & measurement_time, const types::InputChannel & channel_info,
-  std::string & update_strategy, bool is_debug_target)
+  std::string & update_strategy)
 {
   big_vehicle_tracker_.conditionedUpdate(
-    measurement, prediction, smoothed_shape, measurement_time, channel_info, update_strategy,
-    is_debug_target);
+    measurement, prediction, smoothed_shape, measurement_time, channel_info, update_strategy);
   normal_vehicle_tracker_.conditionedUpdate(
-    measurement, prediction, smoothed_shape, measurement_time, channel_info, update_strategy,
-    is_debug_target);
+    measurement, prediction, smoothed_shape, measurement_time, channel_info, update_strategy);
 
   return true;
 }

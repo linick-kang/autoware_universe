@@ -36,58 +36,6 @@
 #endif
 
 #include <algorithm>
-#include <chrono>
-#include <filesystem>
-#include <fstream>
-#include <iomanip>
-#include <sstream>
-
-// DEBUG: Vehicle tracker specific logging functions
-namespace vehicle_debug_logging
-{
-static const std::string LOG_DIR = "/home/linick/result/251010_debug_update";
-static const std::string VEHICLE_LOG_FILE = LOG_DIR + "/vehicle_tracker_debug.log";
-
-void writeVehicleLog(const std::string & message)
-{
-  std::filesystem::create_directories(LOG_DIR);
-
-  auto now = std::chrono::system_clock::now();
-  auto time_t = std::chrono::system_clock::to_time_t(now);
-  auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
-
-  std::stringstream timestamp_ss;
-  timestamp_ss << std::put_time(std::localtime(&time_t), "%Y-%m-%d %H:%M:%S");
-  timestamp_ss << "." << std::setfill('0') << std::setw(3) << ms.count();
-
-  std::ofstream log_file(VEHICLE_LOG_FILE, std::ios::app);
-  if (log_file.is_open()) {
-    log_file << "[" << timestamp_ss.str() << "] " << message << std::endl;
-    log_file.close();
-  }
-}
-
-// Function to log vehicle update summary
-void logVehicleUpdateSummary(const std::string & update_method, const std::string & details)
-{
-  std::filesystem::create_directories(LOG_DIR);
-
-  std::ofstream log_file(VEHICLE_LOG_FILE, std::ios::app);
-  if (log_file.is_open()) {
-    auto now = std::chrono::system_clock::now();
-    auto time_t = std::chrono::system_clock::to_time_t(now);
-    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
-
-    std::stringstream timestamp_ss;
-    timestamp_ss << std::put_time(std::localtime(&time_t), "%Y-%m-%d %H:%M:%S");
-    timestamp_ss << "." << std::setfill('0') << std::setw(3) << ms.count();
-
-    log_file << "[" << timestamp_ss.str() << "] VEHICLE_UPDATE: " << update_method << " - "
-             << details << std::endl;
-    log_file.close();
-  }
-}
-}  // namespace vehicle_debug_logging
 
 namespace autoware::multi_object_tracker
 {
@@ -358,16 +306,10 @@ bool VehicleTracker::conditionedUpdate(
   const types::DynamicObject & measurement, const types::DynamicObject & prediction,
   const autoware_perception_msgs::msg::Shape & smoothed_shape,
   const rclcpp::Time & measurement_time, const types::InputChannel & channel_info,
-  std::string & update_strategy, bool is_debug_target)
+  std::string & update_strategy)
 {
-  // DEBUG: Confirm this method is being called
-  if (is_debug_target) {
-    std::cout << "DEBUG: VehicleTracker::conditionedUpdate() called!" << std::endl;
-    RCLCPP_INFO(logger_, "VEHICLE_CONDITIONED_UPDATE: Vehicle tracker method called");
-  }
-
   // Determine wheel to update
-  WheelInfo wheel_info = estimateUpdateWheel(measurement, prediction, smoothed_shape);
+  WheelInfo wheel_info = estimateUpdateWheel(measurement, prediction);
 
   // Set update strategy string based on wheel info
   switch (wheel_info.strategy) {
@@ -380,11 +322,6 @@ bool VehicleTracker::conditionedUpdate(
     case UpdateStrategy::BODY:
       update_strategy = "VEHICLE_BODY";
       break;
-  }
-
-  // Store update details for debugging
-  if (is_debug_target) {
-    std::cout << "VehicleTracker using strategy: " << update_strategy << std::endl;
   }
 
   // No edge is well-aligned
@@ -426,8 +363,7 @@ bool VehicleTracker::conditionedUpdate(
 }
 
 WheelInfo VehicleTracker::estimateUpdateWheel(
-  const types::DynamicObject & measurement, const types::DynamicObject & prediction,
-  [[maybe_unused]] const autoware_perception_msgs::msg::Shape & smoothed_shape) const
+  const types::DynamicObject & measurement, const types::DynamicObject & prediction) const
 {
   WheelInfo wheel_info;
 
@@ -443,10 +379,6 @@ WheelInfo VehicleTracker::estimateUpdateWheel(
   // Get dimensions
   const double measured_length = measurement.shape.dimensions.x;
   const double predicted_length = prediction.shape.dimensions.x;
-
-  // FIX 3: For wheel position calculations, use predicted length to prevent
-  // noisy measurements from stretching geometry during conditioned updates
-  const double length_for_wheel_calc = predicted_length;
 
   // Calculate edge center points in world coordinates
   const double measured_half_length = measured_length * 0.5;
@@ -501,8 +433,7 @@ WheelInfo VehicleTracker::estimateUpdateWheel(
 
     // Calculate wheel offset from edge (not center) using predicted length (not noisy smoothed)
     const double edge_to_wheel_offset = std::max(
-      length_for_wheel_calc * (0.5 - wheel_offset_ratio),
-      wheel_min_dist - length_for_wheel_calc * 0.5);
+      predicted_length * (0.5 - wheel_offset_ratio), wheel_min_dist - predicted_length * 0.5);
 
     // Calculate wheel position from selected edge center (use measurement yaw for wheel offset)
     if (use_front_wheel) {

@@ -101,8 +101,7 @@ public:
   // object update
   bool updateWithMeasurement(
     const types::DynamicObject & object, const rclcpp::Time & measurement_time,
-    const types::InputChannel & channel_info, bool significant_shape_change,
-    const std::optional<geometry_msgs::msg::Pose> & ego_pose);
+    const types::InputChannel & channel_info, bool significant_shape_change);
   bool updateWithoutMeasurement(const rclcpp::Time & now);
   void updateClassification(
     const std::vector<autoware_perception_msgs::msg::ObjectClassification> & classification);
@@ -204,7 +203,7 @@ protected:
     const types::DynamicObject & measurement, const types::DynamicObject & prediction,
     const autoware_perception_msgs::msg::Shape & smoothed_shape,
     const rclcpp::Time & measurement_time, const types::InputChannel & channel_info,
-    std::string & update_strategy, bool is_debug_target = false);
+    std::string & update_strategy);
 
 public:
   virtual bool getTrackedObject(
