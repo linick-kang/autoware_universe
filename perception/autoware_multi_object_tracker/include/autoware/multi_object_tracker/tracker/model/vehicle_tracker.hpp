@@ -27,13 +27,14 @@
 namespace autoware::multi_object_tracker
 {
 
-// Vehicle update strategy for partial updates
-enum class UpdateStrategy { FRONT_WHEEL, REAR_WHEEL, BODY };
+// Vehicle update strategy type for conditioned updates
+enum class UpdateStrategyType { FRONT_WHEEL_UPDATE, REAR_WHEEL_UPDATE, WEAK_UPDATE };
 
-struct WheelInfo
+struct UpdateStrategy
 {
-  UpdateStrategy strategy;
-  geometry_msgs::msg::Point wheel_position;  // Only used for FRONT_WHEEL and REAR_WHEEL
+  UpdateStrategyType type;
+  geometry_msgs::msg::Point anchor_point;  // Anchor point for the update (used for
+                                           // FRONT_WHEEL_UPDATE and REAR_WHEEL_UPDATE)
 };
 
 class VehicleTracker : public Tracker
@@ -47,6 +48,9 @@ private:
 
   BicycleMotionModel motion_model_;
   using IDX = BicycleMotionModel::IDX;
+
+  // determine anchor point for shape updates by last update strategy
+  BicycleMotionModel::LengthUpdateAnchor shape_update_anchor_;  // Default: CENTER
 
 public:
   VehicleTracker(
@@ -62,12 +66,8 @@ public:
 
   bool conditionedUpdate(
     const types::DynamicObject & measurement, const types::DynamicObject & prediction,
-    const autoware_perception_msgs::msg::Shape & smoothed_shape,
-    const rclcpp::Time & measurement_time, const types::InputChannel & channel_info,
-    std::string & update_strategy) override;
-
-  // Debug-only: get current tracked object without modifying state
-  const types::DynamicObject & getTrackedObjectDebug() const { return object_; }
+    const autoware_perception_msgs::msg::Shape & tracker_shape,
+    const rclcpp::Time & measurement_time, const types::InputChannel & channel_info) override;
 
   bool getTrackedObject(
     const rclcpp::Time & time, types::DynamicObject & object,
@@ -75,8 +75,31 @@ public:
 
   void setObjectShape(const autoware_perception_msgs::msg::Shape & shape) override;
 
-  WheelInfo estimateUpdateWheel(
+  const double ALIGNMENT_RATIO_THRESHOLD = 0.09;  // 9% of length as alignment tolerance
+  UpdateStrategy determineUpdateStrategy(
     const types::DynamicObject & measurement, const types::DynamicObject & prediction) const;
+
+private:
+  // Helper structs for determineUpdateStrategy
+  struct EdgePositions
+  {
+    double front_x, front_y;
+    double rear_x, rear_y;
+  };
+
+  struct EdgeAlignmentDistances
+  {
+    double front_alignment_distance;
+    double rear_alignment_distance;
+  };
+
+  // Helper functions for determineUpdateStrategy
+  EdgePositions calculateEdgeCenters(const types::DynamicObject & obj) const;
+  EdgeAlignmentDistances calculateAlignmentDistances(
+    const EdgePositions & meas_edges, const types::DynamicObject & prediction) const;
+  geometry_msgs::msg::Point calculateAnchorPoint(
+    const EdgePositions & meas_edges, bool use_front_wheel, double predicted_length,
+    const types::DynamicObject & measurement) const;
 };
 
 }  // namespace autoware::multi_object_tracker

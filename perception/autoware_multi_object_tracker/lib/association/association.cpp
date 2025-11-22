@@ -19,8 +19,6 @@
 #include "autoware/multi_object_tracker/object_model/types.hpp"
 
 #include <autoware/object_recognition_utils/object_recognition_utils.hpp>
-#include <autoware_utils/geometry/geometry.hpp>
-#include <autoware_utils/math/unit_conversion.hpp>
 
 #include <algorithm>
 #include <array>
@@ -37,7 +35,7 @@ constexpr double INVALID_SCORE = 0.0;
 
 namespace autoware::multi_object_tracker
 {
-using autoware_utils::ScopedTimeTrack;
+using autoware_utils_debug::ScopedTimeTrack;
 using Label = autoware_perception_msgs::msg::ObjectClassification;
 
 DataAssociation::DataAssociation(const AssociatorConfig & config)
@@ -48,7 +46,8 @@ DataAssociation::DataAssociation(const AssociatorConfig & config)
   updateMaxSearchDistances();
 }
 
-void DataAssociation::setTimeKeeper(std::shared_ptr<autoware_utils::TimeKeeper> time_keeper_ptr)
+void DataAssociation::setTimeKeeper(
+  std::shared_ptr<autoware_utils_debug::TimeKeeper> time_keeper_ptr)
 {
   time_keeper_ = std::move(time_keeper_ptr);
 }
@@ -148,7 +147,7 @@ Eigen::MatrixXd DataAssociation::calcScoreMatrix(
     Eigen::MatrixXd::Zero(trackers.size(), measurements.objects.size());
 
   // Clear previous tracker/measurement pair that shape significantly changed
-  significant_shape_change_set_.clear();
+  significant_shape_change_checker_.clear();
 
   // Pre-allocate vectors to avoid reallocations
   std::vector<types::DynamicObject> tracked_objects;
@@ -231,16 +230,14 @@ Eigen::MatrixXd DataAssociation::calcScoreMatrix(
       const auto & tracked_object = tracked_objects[tracker_idx];
       const auto tracker_label = tracker_labels[tracker_idx];
 
-      bool significant_shape_change = false;
+      bool has_significant_shape_change = false;
       double score = calculateScore(
         tracked_object, tracker_label, measurement_object, measurement_label,
-        tracker_inverse_covariances[tracker_idx], significant_shape_change);
+        tracker_inverse_covariances[tracker_idx], has_significant_shape_change);
       score_matrix(tracker_idx, measurement_idx) = score;
 
-      if (significant_shape_change) {
-        // hash the tracker and measurement index pair
-        significant_shape_change_set_.insert(
-          (static_cast<uint64_t>(tracker_idx) << 32) | measurement_idx);
+      if (has_significant_shape_change) {
+        significant_shape_change_checker_.addPair(tracker_idx, measurement_idx);
       }
     }
   }
@@ -251,7 +248,7 @@ Eigen::MatrixXd DataAssociation::calcScoreMatrix(
 double DataAssociation::calculateScore(
   const types::DynamicObject & tracked_object, const std::uint8_t tracker_label,
   const types::DynamicObject & measurement_object, const std::uint8_t measurement_label,
-  const InverseCovariance2D & inv_cov, bool & significant_shape_change) const
+  const InverseCovariance2D & inv_cov, bool & has_significant_shape_change) const
 {
   // when the tracker and measurements are unknown, use generalized IoU
   if (tracker_label == Label::UNKNOWN && measurement_label == Label::UNKNOWN) {
@@ -310,27 +307,18 @@ double DataAssociation::calculateScore(
   if (iou_score < min_iou) return INVALID_SCORE;
 
   // check if shape changes too much for vehicle labels
-  constexpr double CheckGiouThreshold = 0.7;
-  constexpr double AreaRatioThreshold = 1.3;
-
-  if (iou_score < CheckGiouThreshold && is_vehicle_tracker) {
+  if (iou_score < CHECK_GIOU_THRESHOLD && is_vehicle_tracker) {
     // BEV‑area ratio
     const double area_trk = tracked_object.area;
     const double area_ratio = std::max(area_trk, area_meas) / std::min(area_trk, area_meas);
 
-    if (area_ratio > AreaRatioThreshold) {
-      significant_shape_change = true;
+    if (area_ratio > AREA_RATIO_THRESHOLD) {
+      has_significant_shape_change = true;
     }
   }
 
   // rescale score to [0, 1]
   return (iou_score - min_iou) / (1.0 - min_iou);
-}
-
-bool DataAssociation::hasSignificantShapeChange(size_t tracker_idx, size_t measurement_idx) const
-{
-  uint64_t key = (static_cast<uint64_t>(tracker_idx) << 32) | measurement_idx;
-  return significant_shape_change_set_.count(key);
 }
 
 }  // namespace autoware::multi_object_tracker

@@ -20,10 +20,10 @@
 #define AUTOWARE__MULTI_OBJECT_TRACKER__TRACKER__MODEL__TRACKER_BASE_HPP_
 
 #define EIGEN_MPL2_ONLY
+#include "autoware/multi_object_tracker/association/adaptive_threshold_cache.hpp"
 #include "autoware/multi_object_tracker/object_model/object_model.hpp"
 #include "autoware/multi_object_tracker/object_model/types.hpp"
-#include "autoware/multi_object_tracker/tracker/util/adaptive_threshold_cache.hpp"
-#include "autoware/multi_object_tracker/tracker/util/exponential_moving_average_shape.hpp"
+#include "autoware/multi_object_tracker/tracker/shape_model/unstable_shape_filter.hpp"
 
 #include <Eigen/Core>
 #include <autoware/object_recognition_utils/object_recognition_utils.hpp>
@@ -74,7 +74,7 @@ private:
   static constexpr double SHAPE_VARIATION_THRESHOLD = 0.1;
   static constexpr size_t STABLE_STREAK_THRESHOLD = 4;
 
-  ExponentialMovingAverageShape ema_shape_{
+  UnstableShapeFilter unstable_shape_filter_{
     EMA_ALPHA_WEAK, EMA_ALPHA_STRONG, SHAPE_VARIATION_THRESHOLD, STABLE_STREAK_THRESHOLD};
 
   // cache
@@ -101,7 +101,7 @@ public:
   // object update
   bool updateWithMeasurement(
     const types::DynamicObject & object, const rclcpp::Time & measurement_time,
-    const types::InputChannel & channel_info, bool significant_shape_change);
+    const types::InputChannel & channel_info, bool has_significant_shape_change = false);
   bool updateWithoutMeasurement(const rclcpp::Time & now);
   void updateClassification(
     const std::vector<autoware_perception_msgs::msg::ObjectClassification> & classification);
@@ -160,7 +160,7 @@ public:
     const std::optional<geometry_msgs::msg::Pose> & ego_pose) const;
   bool createPseudoMeasurement(
     const types::DynamicObject & meas, types::DynamicObject & pred,
-    const autoware_perception_msgs::msg::Shape & smoothed_shape,
+    const autoware_perception_msgs::msg::Shape & tracker_shape,
     const bool enlarge_covariance = false);
 
 protected:
@@ -201,18 +201,14 @@ protected:
 
   virtual bool conditionedUpdate(
     const types::DynamicObject & measurement, const types::DynamicObject & prediction,
-    const autoware_perception_msgs::msg::Shape & smoothed_shape,
-    const rclcpp::Time & measurement_time, const types::InputChannel & channel_info,
-    std::string & update_strategy);
+    const autoware_perception_msgs::msg::Shape & tracker_shape,
+    const rclcpp::Time & measurement_time, const types::InputChannel & channel_info);
 
 public:
   virtual bool getTrackedObject(
     const rclcpp::Time & time, types::DynamicObject & object,
     const bool to_publish = false) const = 0;
   virtual bool predict(const rclcpp::Time & time) = 0;
-
-  // Debug-only: get current tracked object without modifying state
-  virtual const types::DynamicObject & getTrackedObjectDebug() const { return object_; }
 };
 
 }  // namespace autoware::multi_object_tracker

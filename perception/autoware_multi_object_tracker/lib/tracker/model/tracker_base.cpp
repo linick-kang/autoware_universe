@@ -18,7 +18,7 @@
 
 #include "autoware/multi_object_tracker/object_model/types.hpp"
 
-#include <autoware_utils/geometry/geometry.hpp>
+#include <autoware_utils_geometry/geometry.hpp>
 
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
@@ -27,14 +27,9 @@
 #endif
 
 #include <algorithm>
-#include <chrono>
 #include <cmath>
-#include <filesystem>
-#include <fstream>
-#include <iomanip>
 #include <limits>
 #include <random>
-#include <sstream>
 #include <vector>
 
 namespace
@@ -121,7 +116,7 @@ void Tracker::mergeExistenceProbabilities(std::vector<float> existence_probabili
 
 bool Tracker::updateWithMeasurement(
   const types::DynamicObject & object, const rclcpp::Time & measurement_time,
-  const types::InputChannel & channel_info, bool significant_shape_change)
+  const types::InputChannel & channel_info, bool has_significant_shape_change)
 {
   // Update existence probability
   {
@@ -175,40 +170,44 @@ bool Tracker::updateWithMeasurement(
     object_.kinematics.orientation_availability = types::OrientationAvailability::SIGN_UNKNOWN;
   }
 
-  // Main update logic - determine which path to take
-  if (!significant_shape_change) {
-    // Input normal measurement for EMA
-    ema_shape_.processNormalMeasurement(object);
+  // Update strategies:
+  // 1. Normal update: Update position and shape by Kalman filter
+  // 2. Extension update: Apply the new stable shape and update position
+  // 3. Conditioned update: Ignore the noisy shape info and partially update position with below 3
+  // conditions
+  //    - FRONT_WHEEL_UPDATE: Update anchor point of front wheel
+  //    - REAR_WHEEL_UPDATE: Update anchor point of rear wheel
+  //    - WEAK_UPDATE: Update tending to predicted position
 
-    // Update object normally
+  if (!has_significant_shape_change) {
+    unstable_shape_filter_.processNormalMeasurement(object);
+    // 1. Normal update
     measure(object, measurement_time, channel_info);
     object_.trust_extension = object.trust_extension;
+
   } else {
-    ema_shape_.processNoisyMeasurement(object);
-    if (ema_shape_.isStable()) {
-      const auto & smoothed_shape_const = ema_shape_.getShape();
-      autoware_perception_msgs::msg::Shape smoothed_shape(smoothed_shape_const);
+    unstable_shape_filter_.processNoisyMeasurement(object);
+    if (unstable_shape_filter_.isStable()) {
+      // 2. Extension update
+      autoware_perception_msgs::msg::Shape smoothed_shape = unstable_shape_filter_.getShape();
 
       setObjectShape(smoothed_shape);
-      // Update object normally
+
       auto smoothed_object = object;
       smoothed_object.shape = smoothed_shape;
       measure(smoothed_object, measurement_time, channel_info);
       object_.trust_extension = smoothed_object.trust_extension;
 
-      // Renew ema_shape_
-      ema_shape_.clear();
-    } else {
-      const auto current_shape = object_.shape;
+      unstable_shape_filter_.clear();
 
-      // Get predicted object
+    } else {
+      // 3. Conditioned update
+      const auto tracker_shape = object_.shape;
+
       types::DynamicObject predicted_object;
       getTrackedObject(measurement_time, predicted_object);
 
-      // Perform conditioned update and capture strategy
-      std::string update_strategy = "NORMAL_UPDATE";
-      conditionedUpdate(
-        object, predicted_object, current_shape, measurement_time, channel_info, update_strategy);
+      conditionedUpdate(object, predicted_object, tracker_shape, measurement_time, channel_info);
     }
   }
 
@@ -243,7 +242,7 @@ bool Tracker::updateWithoutMeasurement(const rclcpp::Time & timestamp)
 
 bool Tracker::createPseudoMeasurement(
   const types::DynamicObject & meas, types::DynamicObject & pred,
-  const autoware_perception_msgs::msg::Shape & smoothed_shape, const bool enlarge_covariance)
+  const autoware_perception_msgs::msg::Shape & tracker_shape, const bool enlarge_covariance)
 {
   // Apply linear fall‑off weight on dist square
   const double dx = meas.pose.position.x - pred.pose.position.x;
@@ -258,28 +257,26 @@ bool Tracker::createPseudoMeasurement(
   pred.pose.position.y = pred.pose.position.y * (1 - w_pose) + meas.pose.position.y * w_pose;
 
   // Use smoothed shape and its area
-  pred.shape = smoothed_shape;
-  pred.area = types::getArea(smoothed_shape);
+  pred.shape = tracker_shape;
+  pred.area = types::getArea(tracker_shape);
 
   // Blend orientation
   if (meas.kinematics.orientation_availability != types::OrientationAvailability::UNAVAILABLE) {
     double yaw_pred = tf2::getYaw(pred.pose.orientation);
     double yaw_meas = tf2::getYaw(meas.pose.orientation);
 
-    // Handle SIGN_UNKNOWN: limit yaw difference to [-90°, 90°] to prevent sudden rotations
+    double yaw_diff = yaw_meas - yaw_pred;
+    // Normalize yaw_diff to [-π, π] using fmod
+    yaw_diff = std::fmod(yaw_diff + M_PI, 2 * M_PI) - M_PI;
+    // Handle SIGN_UNKNOWN: limit yaw difference to [-90°, 90°]
     if (meas.kinematics.orientation_availability == types::OrientationAvailability::SIGN_UNKNOWN) {
-      double yaw_diff = yaw_meas - yaw_pred;
-      // Normalize yaw_diff to [-π, π] using fmod
-      yaw_diff = std::fmod(yaw_diff + M_PI, 2 * M_PI) - M_PI;
       if (yaw_diff > M_PI_2) {
         yaw_diff -= M_PI;
       } else if (yaw_diff < -M_PI_2) {
         yaw_diff += M_PI;
       }
-      yaw_meas = yaw_pred + yaw_diff;
     }
-
-    double yaw_fused = yaw_pred * (1 - w_pose) + yaw_meas * w_pose;
+    double yaw_fused = yaw_pred + yaw_diff * w_pose;
     tf2::Quaternion q;
     q.setRPY(0, 0, yaw_fused);
     pred.pose.orientation = tf2::toMsg(q);
@@ -287,7 +284,7 @@ bool Tracker::createPseudoMeasurement(
 
   // Enlarge covariance if requested (for weak updates)
   if (enlarge_covariance) {
-    using autoware_utils::xyzrpy_covariance_index::XYZRPY_COV_IDX;
+    using autoware_utils_geometry::xyzrpy_covariance_index::XYZRPY_COV_IDX;
     constexpr double additional_position_cov = 9.0;     // [m^2] additional variance
     constexpr double additional_orientation_cov = 0.5;  // [rad^2] additional variance
     constexpr double additional_velocity_cov = 25.0;    // [m^2/s^2] additional variance
@@ -415,7 +412,7 @@ void Tracker::getPositionCovarianceEigenSq(
   if (object.time.seconds() + 1e-6 < time.seconds()) {  // 1usec is allowed error
     getTrackedObject(time, object);
   }
-  using autoware_utils::xyzrpy_covariance_index::XYZRPY_COV_IDX;
+  using autoware_utils_geometry::xyzrpy_covariance_index::XYZRPY_COV_IDX;
   auto & pose_cov = object.pose_covariance;
 
   // principal component of the position covariance matrix
@@ -577,7 +574,7 @@ float Tracker::getKnownObjectProbability() const
 
 double Tracker::getPositionCovarianceDeterminant() const
 {
-  using autoware_utils::xyzrpy_covariance_index::XYZRPY_COV_IDX;
+  using autoware_utils_geometry::xyzrpy_covariance_index::XYZRPY_COV_IDX;
   auto & pose_cov = object_.pose_covariance;
 
   // The covariance size is defined as the square of the dominant eigenvalue
@@ -599,20 +596,29 @@ double Tracker::getPositionCovarianceDeterminant() const
 
 bool Tracker::conditionedUpdate(
   const types::DynamicObject & measurement, const types::DynamicObject & prediction,
-  const autoware_perception_msgs::msg::Shape & smoothed_shape,
-  const rclcpp::Time & measurement_time, const types::InputChannel & channel_info,
-  std::string & update_strategy)
+  const autoware_perception_msgs::msg::Shape & tracker_shape, const rclcpp::Time & measurement_time,
+  const types::InputChannel & channel_info)
 {
-  // For non-vehicle trackers, create pseudo measurement
-  types::DynamicObject pseudo_measurement = prediction;
-  createPseudoMeasurement(measurement, pseudo_measurement, smoothed_shape);
+  (void)measurement;
+  (void)prediction;
+  (void)tracker_shape;
+  (void)measurement_time;
+  (void)channel_info;
+  RCLCPP_ERROR(
+    rclcpp::get_logger("Tracker"),
+    "Tracker::conditionedUpdate: Base class method is NOT expected to be called.");
+  return false;
 
-  // Apply the measurement update directly
-  measure(pseudo_measurement, measurement_time, channel_info);
-
-  update_strategy = "NON_VEHICLE";
-
-  return true;
+  // NOTE: The following default implementation is commented out as it not well-tested yet.
+  //
+  // // For non-vehicle trackers, create pseudo measurement
+  // types::DynamicObject pseudo_measurement = prediction;
+  // createPseudoMeasurement(measurement, pseudo_measurement, tracker_shape);
+  //
+  // // Apply the measurement update directly
+  // measure(pseudo_measurement, measurement_time, channel_info);
+  //
+  // return true;
 }
 
 }  // namespace autoware::multi_object_tracker
