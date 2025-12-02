@@ -27,7 +27,11 @@
 #endif
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
+#include <filesystem>
+#include <fstream>
+#include <iomanip>
 #include <limits>
 #include <random>
 #include <vector>
@@ -57,6 +61,296 @@ float decayProbability(const float & prior, const float & delta_time)
   return std::max(prior * std::exp(decay_rate * delta_time), minimum_probability);
 }
 }  // namespace
+
+// DEBUG: Add debugging functionality for vehicle tracking analysis
+namespace debug_vehicle_tracking
+{
+// Configuration for debugging - modify these values as needed
+// NOTE: Coordinates are EGO-RELATIVE (relative to ego vehicle position)
+static constexpr double DEBUG_TARGET_X =
+  5.0;  // Target X position relative to ego (meters ahead) - center
+static constexpr double DEBUG_TARGET_Y =
+  -7.0;  // Target Y position relative to ego (meters left/right) - right side
+static constexpr double DEBUG_AREA_THRESHOLD =
+  8.0;                                      // Area threshold in meters (wider coverage)
+static constexpr bool ENABLE_DEBUG = true;  // Set to false to disable debugging
+
+// Log file paths
+static const std::string LOG_DIR = "/home/linick/result/251202_debug_tracker";
+static const std::string UPDATE_LOG_FILE = LOG_DIR + "/vehicle_update_analysis.log";
+
+// Function to ensure directory exists
+void ensureLogDirectory()
+{
+  if (!debug_vehicle_tracking::ENABLE_DEBUG) return;
+  std::filesystem::create_directories(debug_vehicle_tracking::LOG_DIR);
+}
+
+// Function to get current timestamp
+std::string getCurrentTimestamp()
+{
+  auto now = std::chrono::system_clock::now();
+  auto time_t = std::chrono::system_clock::to_time_t(now);
+  auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+
+  std::stringstream ss;
+  ss << std::put_time(std::localtime(&time_t), "%Y-%m-%d %H:%M:%S");
+  ss << "." << std::setfill('0') << std::setw(3) << ms.count();
+  return ss.str();
+}
+
+// Function to write to log file
+void writeToLog(const std::string & filename, const std::string & message)
+{
+  if (!debug_vehicle_tracking::ENABLE_DEBUG) return;
+  ensureLogDirectory();
+
+  // Write initialization message on first write
+  static bool initialized = false;
+  if (!initialized) {
+    initialized = true;
+    std::ofstream init_file(filename, std::ios::out);  // Use ios::out to overwrite any existing file
+    if (init_file.is_open()) {
+      init_file << "=== VEHICLE TRACKING DEBUG SYSTEM INITIALIZED ===\n";
+      init_file << "Timestamp: " << getCurrentTimestamp() << "\n";
+      init_file << "Debug Target: (" << debug_vehicle_tracking::DEBUG_TARGET_X << ", "
+               << debug_vehicle_tracking::DEBUG_TARGET_Y << ") with threshold "
+               << debug_vehicle_tracking::DEBUG_AREA_THRESHOLD << " meters\n";
+      init_file << "Using ego-relative coordinates when ego pose available, global coordinates otherwise\n";
+      init_file << "Waiting for vehicle trackers in debug area...\n";
+      init_file << "================================================\n\n";
+      init_file.close();
+    }
+  }
+
+  std::ofstream log_file(filename, std::ios::app);
+  if (log_file.is_open()) {
+    log_file << "[" << getCurrentTimestamp() << "] " << message << std::endl;
+    log_file.close();
+  } else {
+    // Debug: write to stderr if file can't be opened
+    std::cerr << "DEBUG: Failed to open log file: " << filename << std::endl;
+    std::cerr << "DEBUG: Message was: " << message.substr(0, 100) << "..." << std::endl;
+  }
+}
+
+// Function to check if tracker is a vehicle (using the same logic as association.cpp)
+bool isVehicleTracker(const autoware::multi_object_tracker::Tracker & tracker)
+{
+  using Label = autoware_perception_msgs::msg::ObjectClassification;
+  const auto tracker_label = tracker.getHighestProbLabel();
+  const bool is_vehicle_tracker = tracker_label == Label::CAR || tracker_label == Label::BUS ||
+                                  tracker_label == Label::TRUCK || tracker_label == Label::TRAILER;
+  return is_vehicle_tracker;
+}
+
+// Function to transform object position to ego-relative coordinates
+std::pair<double, double> transformToEgoRelative(
+  const autoware::multi_object_tracker::types::DynamicObject & object,
+  const geometry_msgs::msg::Pose & ego_pose)
+{
+  // Get object position in global frame
+  const double obj_x = object.pose.position.x;
+  const double obj_y = object.pose.position.y;
+
+  // Get ego position and orientation in global frame
+  const double ego_x = ego_pose.position.x;
+  const double ego_y = ego_pose.position.y;
+  const double ego_yaw = tf2::getYaw(ego_pose.orientation);
+
+  // Transform object position to ego vehicle's local coordinate frame
+  // Step 1: Translate to ego-centered coordinates
+  const double dx_global = obj_x - ego_x;
+  const double dy_global = obj_y - ego_y;
+
+  // Step 2: Rotate to ego vehicle's orientation (inverse rotation)
+  const double cos_yaw = std::cos(-ego_yaw);  // Negative for inverse rotation
+  const double sin_yaw = std::sin(-ego_yaw);
+
+  const double relative_x =
+    dx_global * cos_yaw - dy_global * sin_yaw;  // Forward/backward relative to ego
+  const double relative_y =
+    dx_global * sin_yaw + dy_global * cos_yaw;  // Left/right relative to ego
+
+  return std::make_pair(relative_x, relative_y);
+}
+
+// Function to check if tracker is in debug area (ego-relative coordinates)
+bool isTrackerInDebugArea(
+  const autoware::multi_object_tracker::Tracker & tracker,
+  const autoware::multi_object_tracker::types::DynamicObject & tracker_object,
+  const std::optional<geometry_msgs::msg::Pose> & ego_pose)
+{
+  if (!debug_vehicle_tracking::ENABLE_DEBUG) return false;
+
+  // Only debug vehicle trackers
+  if (!isVehicleTracker(tracker)) {
+    return false;
+  }
+
+  // If no ego pose available, fall back to global coordinate check
+  if (!ego_pose) {
+    const double dx = tracker_object.pose.position.x - debug_vehicle_tracking::DEBUG_TARGET_X;
+    const double dy = tracker_object.pose.position.y - debug_vehicle_tracking::DEBUG_TARGET_Y;
+    const double distance = std::sqrt(dx * dx + dy * dy);
+    return distance <= debug_vehicle_tracking::DEBUG_AREA_THRESHOLD;
+  }
+
+  // Transform to ego-relative coordinates
+  auto [relative_x, relative_y] = transformToEgoRelative(tracker_object, *ego_pose);
+
+  // Check if object is at target relative position
+  const double dx = relative_x - debug_vehicle_tracking::DEBUG_TARGET_X;
+  const double dy = relative_y - debug_vehicle_tracking::DEBUG_TARGET_Y;
+  const double distance = std::sqrt(dx * dx + dy * dy);
+
+  return distance <= debug_vehicle_tracking::DEBUG_AREA_THRESHOLD;
+}
+
+// Function to convert UUID to string
+std::string uuidToString(const unique_identifier_msgs::msg::UUID & uuid)
+{
+  std::stringstream ss;
+  for (size_t i = 0; i < uuid.uuid.size(); ++i) {
+    ss << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(uuid.uuid[i]);
+    if (i == 3 || i == 5 || i == 7 || i == 9) ss << "-";
+  }
+  return ss.str();
+}
+
+// Function to format object state with ego-relative coordinates only
+std::string formatObjectState(
+  const std::string & prefix, const autoware::multi_object_tracker::types::DynamicObject & object,
+  const std::optional<geometry_msgs::msg::Pose> & ego_pose)
+{
+  std::stringstream ss;
+  ss << prefix;
+
+  // Ego-relative coordinates if ego pose available
+  if (ego_pose) {
+    auto [rel_x, rel_y] = transformToEgoRelative(object, *ego_pose);
+    ss << " - Ego-rel: (" << std::fixed << std::setprecision(3) << rel_x << ", " << rel_y << ")";
+  } else {
+    ss << " - No ego pose available";
+  }
+
+  // Velocity
+  ss << ", Vel: (" << (object.kinematics.has_twist ? object.twist.linear.x : 0.0) << ", "
+     << (object.kinematics.has_twist ? object.twist.linear.y : 0.0) << ")";
+
+  // Yaw (orientation)
+  double yaw = tf2::getYaw(object.pose.orientation);
+  ss << ", Yaw: " << std::fixed << std::setprecision(3) << yaw;
+
+  // Dimensions
+  ss << ", Dims: (" << object.shape.dimensions.x << ", " << object.shape.dimensions.y << ", "
+     << object.shape.dimensions.z << ")";
+
+  return ss.str();
+}
+
+// Function to log complete update summary
+void logUpdateSummary(
+  const std::string & uuid, const std::string & update_method,
+  const autoware::multi_object_tracker::types::DynamicObject & before_state,
+  const autoware::multi_object_tracker::types::DynamicObject & after_state,
+  const autoware::multi_object_tracker::types::DynamicObject & measurement,
+  const std::optional<geometry_msgs::msg::Pose> & ego_pose,
+  const autoware::multi_object_tracker::types::InputChannel & channel_info,
+  const std::string & additional_details = "")
+{
+  if (!debug_vehicle_tracking::ENABLE_DEBUG) return;
+
+  std::stringstream summary;
+  summary << "=== VEHICLE UPDATE SUMMARY ===\n";
+  summary << "UUID: " << uuid << " | METHOD: " << update_method << " | SOURCE: " << channel_info.short_name;
+  if (!additional_details.empty()) {
+    summary << " | DETAILS: " << additional_details;
+  }
+  summary << "\n";
+
+  // Add ego-relative coordinates
+  if (ego_pose) {
+    auto [before_rel_x, before_rel_y] = transformToEgoRelative(before_state, *ego_pose);
+    auto [after_rel_x, after_rel_y] = transformToEgoRelative(after_state, *ego_pose);
+    auto [meas_rel_x, meas_rel_y] = transformToEgoRelative(measurement, *ego_pose);
+
+    summary << "BEFORE - EgoRel: (" << std::fixed << std::setprecision(3) << before_rel_x << ", "
+            << before_rel_y << ")"
+            << ", Vel: (" << (before_state.kinematics.has_twist ? before_state.twist.linear.x : 0.0)
+            << ", " << (before_state.kinematics.has_twist ? before_state.twist.linear.y : 0.0)
+            << "), Yaw: " << std::fixed << std::setprecision(3) << tf2::getYaw(before_state.pose.orientation)
+            << ", Dims: (" << before_state.shape.dimensions.x << ", "
+            << before_state.shape.dimensions.y << ", " << before_state.shape.dimensions.z << ")\n";
+    summary << "MEASUREMENT - EgoRel: (" << meas_rel_x << ", " << meas_rel_y << ")"
+            << ", Vel: (" << (measurement.kinematics.has_twist ? measurement.twist.linear.x : 0.0)
+            << ", " << (measurement.kinematics.has_twist ? measurement.twist.linear.y : 0.0) << ")"
+            << ", Yaw: " << std::fixed << std::setprecision(3) << tf2::getYaw(measurement.pose.orientation)
+            << ", Dims: (" << measurement.shape.dimensions.x << ", "
+            << measurement.shape.dimensions.y << ", " << measurement.shape.dimensions.z << ")\n";
+    summary << "AFTER - EgoRel: (" << after_rel_x << ", " << after_rel_y << ")"
+            << ", Vel: (" << (after_state.kinematics.has_twist ? after_state.twist.linear.x : 0.0)
+            << ", " << (after_state.kinematics.has_twist ? after_state.twist.linear.y : 0.0) << ")"
+            << ", Yaw: " << std::fixed << std::setprecision(3) << tf2::getYaw(after_state.pose.orientation)
+            << ", Dims: (" << after_state.shape.dimensions.x << ", "
+            << after_state.shape.dimensions.y << ", " << after_state.shape.dimensions.z << ")\n";
+    summary << "CHANGE - ΔEgoRel: (" << (after_rel_x - before_rel_x) << ", "
+            << (after_rel_y - before_rel_y) << ")"
+            << ", ΔVel: ("
+            << ((after_state.kinematics.has_twist ? after_state.twist.linear.x : 0.0) -
+                (before_state.kinematics.has_twist ? before_state.twist.linear.x : 0.0))
+            << ", "
+            << ((after_state.kinematics.has_twist ? after_state.twist.linear.y : 0.0) -
+                (before_state.kinematics.has_twist ? before_state.twist.linear.y : 0.0))
+            << "), ΔYaw: " << std::fixed << std::setprecision(3)
+            << (tf2::getYaw(after_state.pose.orientation) - tf2::getYaw(before_state.pose.orientation))
+            << ", ΔDims: (" << (after_state.shape.dimensions.x - before_state.shape.dimensions.x)
+            << ", " << (after_state.shape.dimensions.y - before_state.shape.dimensions.y) << ", "
+            << (after_state.shape.dimensions.z - before_state.shape.dimensions.z) << ")\n";
+  } else {
+    // Fallback to global coordinates if no ego pose
+    summary << "BEFORE - Pos: (" << std::fixed << std::setprecision(3)
+            << before_state.pose.position.x << ", " << before_state.pose.position.y << ", "
+            << before_state.pose.position.z << ")"
+            << ", Vel: (" << (before_state.kinematics.has_twist ? before_state.twist.linear.x : 0.0)
+            << ", " << (before_state.kinematics.has_twist ? before_state.twist.linear.y : 0.0)
+            << "), Yaw: " << std::fixed << std::setprecision(3) << tf2::getYaw(before_state.pose.orientation)
+            << ", Dims: (" << before_state.shape.dimensions.x << ", "
+            << before_state.shape.dimensions.y << ", " << before_state.shape.dimensions.z << ")\n";
+    summary << "MEASUREMENT - Pos: (" << measurement.pose.position.x << ", "
+            << measurement.pose.position.y << ", " << measurement.pose.position.z << ")"
+            << ", Vel: (" << (measurement.kinematics.has_twist ? measurement.twist.linear.x : 0.0)
+            << ", " << (measurement.kinematics.has_twist ? measurement.twist.linear.y : 0.0) << ")"
+            << ", Yaw: " << std::fixed << std::setprecision(3) << tf2::getYaw(measurement.pose.orientation)
+            << ", Dims: (" << measurement.shape.dimensions.x << ", "
+            << measurement.shape.dimensions.y << ", " << measurement.shape.dimensions.z << ")\n";
+    summary << "AFTER - Pos: (" << after_state.pose.position.x << ", "
+            << after_state.pose.position.y << ", " << after_state.pose.position.z << ")"
+            << ", Vel: (" << (after_state.kinematics.has_twist ? after_state.twist.linear.x : 0.0)
+            << ", " << (after_state.kinematics.has_twist ? after_state.twist.linear.y : 0.0) << ")"
+            << ", Yaw: " << std::fixed << std::setprecision(3) << tf2::getYaw(after_state.pose.orientation)
+            << ", Dims: (" << after_state.shape.dimensions.x << ", "
+            << after_state.shape.dimensions.y << ", " << after_state.shape.dimensions.z << ")\n";
+    summary << "CHANGE - ΔPos: (" << (after_state.pose.position.x - before_state.pose.position.x)
+            << ", " << (after_state.pose.position.y - before_state.pose.position.y) << ")"
+            << ", ΔVel: ("
+            << ((after_state.kinematics.has_twist ? after_state.twist.linear.x : 0.0) -
+                (before_state.kinematics.has_twist ? before_state.twist.linear.x : 0.0))
+            << ", "
+            << ((after_state.kinematics.has_twist ? after_state.twist.linear.y : 0.0) -
+                (before_state.kinematics.has_twist ? before_state.twist.linear.y : 0.0))
+            << "), ΔYaw: " << std::fixed << std::setprecision(3)
+            << (tf2::getYaw(after_state.pose.orientation) - tf2::getYaw(before_state.pose.orientation))
+            << ", ΔDims: (" << (after_state.shape.dimensions.x - before_state.shape.dimensions.x)
+            << ", " << (after_state.shape.dimensions.y - before_state.shape.dimensions.y) << ", "
+            << (after_state.shape.dimensions.z - before_state.shape.dimensions.z) << ")\n";
+  }
+  summary << "==============================";
+
+  writeToLog(UPDATE_LOG_FILE, summary.str());
+}
+
+}  // namespace debug_vehicle_tracking
 
 namespace autoware::multi_object_tracker
 {
@@ -116,8 +410,24 @@ void Tracker::mergeExistenceProbabilities(std::vector<float> existence_probabili
 
 bool Tracker::updateWithMeasurement(
   const types::DynamicObject & object, const rclcpp::Time & measurement_time,
-  const types::InputChannel & channel_info, bool has_significant_shape_change)
+  const types::InputChannel & channel_info, bool has_significant_shape_change,
+  const std::optional<geometry_msgs::msg::Pose> & ego_pose)
 {
+  // DEBUG: Basic debug info - removed for cleaner output
+
+  // DEBUG: Check if this tracker is in our debug area (check tracker state, not measurement)
+  const bool is_debug_object =
+    debug_vehicle_tracking::isTrackerInDebugArea(*this, object_, ego_pose);
+
+  // Store tracker state before update for debug comparison
+  types::DynamicObject tracker_before_state;
+  std::string update_method;
+  std::string update_details;
+
+  if (is_debug_object) {
+    tracker_before_state = object_;  // Store tracker's current state
+  }
+
   // Update existence probability
   {
     no_measurement_count_ = 0;
@@ -180,16 +490,32 @@ bool Tracker::updateWithMeasurement(
   //    - WEAK_UPDATE: Update tending to predicted position
 
   if (!has_significant_shape_change) {
+    if (is_debug_object) {
+      update_method = "NORMAL_UPDATE";
+      update_details = "No significant shape change detected";
+    }
+
     unstable_shape_filter_.processNormalMeasurement(object);
     // 1. Normal update
     measure(object, measurement_time, channel_info);
     object_.trust_extension = object.trust_extension;
+
+    // For normal measure, we will log at the end after getTrackedObject updates the state
 
   } else {
     unstable_shape_filter_.processNoisyMeasurement(object);
     if (unstable_shape_filter_.isStable()) {
       // 2. Extension update
       autoware_perception_msgs::msg::Shape smoothed_shape = unstable_shape_filter_.getShape();
+
+      if (is_debug_object) {
+        update_method = "EMA_STABLE_UPDATE";
+        std::stringstream ss;
+        ss << "EMA stable, smoothed shape dims(" << std::fixed << std::setprecision(3)
+           << smoothed_shape.dimensions.x << ", " << smoothed_shape.dimensions.y << ", "
+           << smoothed_shape.dimensions.z << ")";
+        update_details = ss.str();
+      }
 
       setObjectShape(smoothed_shape);
 
@@ -213,6 +539,13 @@ bool Tracker::updateWithMeasurement(
 
   // Update object status
   getTrackedObject(measurement_time, object_);
+
+  // Log comprehensive update summary for all debug objects
+  if (is_debug_object) {
+    debug_vehicle_tracking::logUpdateSummary(
+      debug_vehicle_tracking::uuidToString(object_.uuid), update_method, tracker_before_state,
+      object_, object, ego_pose, channel_info, update_details);
+  }
 
   // update time
   object_.time = measurement_time;

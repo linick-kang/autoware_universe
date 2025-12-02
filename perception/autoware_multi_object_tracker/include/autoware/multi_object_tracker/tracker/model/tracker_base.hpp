@@ -101,7 +101,8 @@ public:
   // object update
   bool updateWithMeasurement(
     const types::DynamicObject & object, const rclcpp::Time & measurement_time,
-    const types::InputChannel & channel_info, bool has_significant_shape_change = false);
+    const types::InputChannel & channel_info, bool has_significant_shape_change = false,
+    const std::optional<geometry_msgs::msg::Pose> & ego_pose = std::nullopt);
   bool updateWithoutMeasurement(const rclcpp::Time & now);
   void updateClassification(
     const std::vector<autoware_perception_msgs::msg::ObjectClassification> & classification);
