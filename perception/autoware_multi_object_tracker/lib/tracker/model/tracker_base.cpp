@@ -239,6 +239,30 @@ std::string getObjectInfo(const autoware::multi_object_tracker::types::DynamicOb
   return std::string(buf);
 }
 
+// Helper function to format yaw information
+std::string getYawInfo(const autoware::multi_object_tracker::types::DynamicObject & obj)
+{
+  char buf[64];
+  const double yaw = tf2::getYaw(obj.pose.orientation);
+  const double yaw_deg = yaw * 180.0 / M_PI;  // Convert to degrees for readability
+  snprintf(buf, sizeof(buf), "Yaw(%.2f°/%.3frad)", yaw_deg, yaw);
+  return std::string(buf);
+}
+
+// Helper function to format ego pose information
+std::string getEgoPoseInfo(const std::optional<geometry_msgs::msg::Pose> & ego_pose)
+{
+  if (!ego_pose) {
+    return "EgoPose:N/A";
+  }
+  char buf[128];
+  const double ego_yaw = tf2::getYaw(ego_pose->orientation);
+  const double ego_yaw_deg = ego_yaw * 180.0 / M_PI;
+  snprintf(buf, sizeof(buf), "EgoPose(%.1f,%.1f,%.2f°)",
+           ego_pose->position.x, ego_pose->position.y, ego_yaw_deg);
+  return std::string(buf);
+}
+
 // Enhanced logging with significant change detection and update details
 void logTrackerUpdate(
   const std::string & uuid,
@@ -247,11 +271,14 @@ void logTrackerUpdate(
   const autoware::multi_object_tracker::types::DynamicObject & measurement,
   const std::optional<geometry_msgs::msg::Pose> & ego_pose,
   const bool has_significant_shape_change,
-  const std::string & update_details = "")
+  const std::string & update_details,
+  const rclcpp::Time & measurement_time,
+  const std::string & update_strategy,
+  const std::string & alignment_info,
+  const std::string & anchor_centers_info,
+  const std::string & edge_wheel_offset)
 {
   if (!debug_vehicle_tracking::ENABLE_DEBUG) return;
-
-  char buf[1024];
 
   // Compute diffs in global coordinates first
   const double dx_global = after_state.pose.position.x - before_state.pose.position.x;
@@ -275,37 +302,47 @@ void logTrackerUpdate(
                      (before_state.kinematics.has_twist ? before_state.twist.linear.y : 0.0);
 
   // Check for significant position/velocity changes (>0.5m threshold) in EGO coordinates
-  const bool significant_pos_change = std::abs(dx_ego) > 0.5;
+  const bool significant_pos_change = std::abs(dx_ego) > 1;
   const bool significant_vel_change = std::abs(dvx) > 0.5;
   const bool significant_change = significant_pos_change || significant_vel_change;
 
   // Format enhanced log entry with significant change flags and update details
   if (significant_change) {
     // Highlight significant changes with *** markers
-    snprintf(buf, sizeof(buf),
-             "***SIGNIFICANT_CHANGE*** UUID:%s ΔEgoX:%.2fm ΔVx:%.2fm BEFORE:%s MEAS:%s AFTER:%s DIFF:ΔEgoPos(%.2f,%.2f) ΔVel(%.2f,%.2f) SHAPE_CHANGE:%s DETAILS:%s",
-             uuid.substr(0,8).c_str(),
-             dx_ego, dvx,
-             getObjectInfo(before_state).c_str(),
-             getObjectInfo(measurement).c_str(),
-             getObjectInfo(after_state).c_str(),
-             dx_ego, dy_ego, dvx, dvy,
-             has_significant_shape_change ? "YES" : "NO",
-             update_details.c_str());
-  } else {
-    // Normal logging for smaller changes
-    snprintf(buf, sizeof(buf),
-             "UUID:%s BEFORE:%s MEAS:%s AFTER:%s DIFF:ΔEgoPos(%.2f,%.2f) ΔVel(%.2f,%.2f) SHAPE_CHANGE:%s DETAILS:%s",
-             uuid.substr(0,8).c_str(),
-             getObjectInfo(before_state).c_str(),
-             getObjectInfo(measurement).c_str(),
-             getObjectInfo(after_state).c_str(),
-             dx_ego, dy_ego, dvx, dvy,
-             has_significant_shape_change ? "YES" : "NO",
-             update_details.c_str());
-  }
+    const double timestamp_sec = measurement_time.seconds();
+    // Build comprehensive log message with all requested information
+    std::string message = "***SIGNIFICANT_CHANGE*** ";
 
-  writeToLog(UPDATE_LOG_FILE, buf);
+    // Timestamp (ROS time)
+    message += "TS:" + std::to_string(timestamp_sec).substr(0, 6) + "s ";
+
+    // UUID and Update strategy
+    message += "UUID:" + uuid.substr(0,8) + " ";
+    message += "STRATEGY:" + update_strategy + " ";
+
+    // Position change in ego frame
+    char coords_buf[64];
+    snprintf(coords_buf, sizeof(coords_buf), "ΔEgoPos(%.2f,%.2f) ΔVel(%.2f,%.2f) ", dx_ego, dy_ego, dvx, dvy);
+    message += coords_buf;
+
+    // Ego pose information
+    message += getEgoPoseInfo(ego_pose) + " ";
+
+    // Object states with yaw information
+    message += "BEFORE:[" + getObjectInfo(before_state) + " " + getYawInfo(before_state) + "] ";
+    message += "MEAS:[" + getObjectInfo(measurement) + " " + getYawInfo(measurement) + "] ";
+    message += "AFTER:[" + getObjectInfo(after_state) + " " + getYawInfo(after_state) + "] ";
+
+    // Shape change flag
+    message += "SHAPE_CHANGE:" + std::string(has_significant_shape_change ? "YES" : "NO");
+
+    // Additional conditional information
+    if (!alignment_info.empty()) message += " ALIGNMENT:" + alignment_info;
+    if (!anchor_centers_info.empty()) message += " ANCHOR:" + anchor_centers_info;
+    if (!edge_wheel_offset.empty()) message += " EDGE_OFFSET:" + edge_wheel_offset;
+    if (!update_details.empty()) message += " DETAILS:" + update_details;
+
+    writeToLog(UPDATE_LOG_FILE, message);}
 }
 
 }  // namespace debug_vehicle_tracking
@@ -377,10 +414,17 @@ bool Tracker::updateWithMeasurement(
   const bool is_debug_object =
     debug_vehicle_tracking::isTrackerInDebugArea(*this, object_, ego_pose);
 
+
   // Store tracker state before update for debug comparison
   types::DynamicObject tracker_before_state;
   std::string update_method;
   std::string update_details;
+
+  // Additional debug info for conditioned updates
+  std::string update_strategy_detail;
+  std::string alignment_info_detail;
+  std::string anchor_centers_info_detail;
+  std::string edge_wheel_offset_detail;
 
   if (is_debug_object) {
     tracker_before_state = object_;  // Store tracker's current state
@@ -486,7 +530,6 @@ bool Tracker::updateWithMeasurement(
 
     } else {
       // 3. Conditioned update
-      std::string update_strategy_detail;
       if (is_debug_object) {
         update_method = "CONDITIONED_UPDATE";
         update_details = "EMA not stable, using conditioned update";
@@ -497,7 +540,8 @@ bool Tracker::updateWithMeasurement(
       types::DynamicObject predicted_object;
       getTrackedObject(measurement_time, predicted_object);
 
-      conditionedUpdate(object, predicted_object, tracker_shape, measurement_time, channel_info, update_strategy_detail);
+      conditionedUpdate(object, predicted_object, tracker_shape, measurement_time, channel_info,
+                       update_strategy_detail, alignment_info_detail, anchor_centers_info_detail, edge_wheel_offset_detail);
       if (is_debug_object) {
         update_details = "Strategy: " + update_strategy_detail;
       }
@@ -509,9 +553,23 @@ bool Tracker::updateWithMeasurement(
 
   // Log enhanced update info with significant change detection for debug objects
   if (is_debug_object) {
+    std::string update_strategy = "NORMAL";  // Default for normal updates
+    std::string alignment_info = "";
+    std::string anchor_centers_info = "";
+    std::string edge_wheel_offset = "";
+
+    // Extract strategy from update_details if it's a conditioned update
+    if (update_details.find("Strategy: ") == 0) {
+      update_strategy = update_strategy_detail;  // Use the detailed strategy from conditioned update
+      alignment_info = alignment_info_detail;
+      anchor_centers_info = anchor_centers_info_detail;
+      edge_wheel_offset = edge_wheel_offset_detail;
+    }
+
     debug_vehicle_tracking::logTrackerUpdate(
       debug_vehicle_tracking::uuidToString(object_.uuid), tracker_before_state,
-      object_, object, ego_pose, has_significant_shape_change, update_details);
+      object_, object, ego_pose, has_significant_shape_change, update_details,
+      measurement_time, update_strategy, alignment_info, anchor_centers_info, edge_wheel_offset);
   }
 
   // update time
@@ -897,7 +955,8 @@ double Tracker::getPositionCovarianceDeterminant() const
 bool Tracker::conditionedUpdate(
   const types::DynamicObject & measurement, const types::DynamicObject & prediction,
   const autoware_perception_msgs::msg::Shape & tracker_shape, const rclcpp::Time & measurement_time,
-  const types::InputChannel & channel_info, std::string & update_strategy)
+  const types::InputChannel & channel_info, std::string & update_strategy,
+  std::string & alignment_info, std::string & anchor_centers_info, std::string & edge_wheel_offset)
 {
   (void)measurement;
   (void)prediction;
@@ -905,6 +964,9 @@ bool Tracker::conditionedUpdate(
   (void)measurement_time;
   (void)channel_info;
   (void)update_strategy;
+  (void)alignment_info;
+  (void)anchor_centers_info;
+  (void)edge_wheel_offset;
   RCLCPP_ERROR(
     rclcpp::get_logger("Tracker"),
     "Tracker::conditionedUpdate: Base class method is NOT expected to be called.");

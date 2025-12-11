@@ -260,13 +260,13 @@ bool BicycleMotionModel::updateStatePoseRear(
   const double wheel_base = std::hypot(X_t(IDX::X2) - X_t(IDX::X1), X_t(IDX::Y2) - X_t(IDX::Y1));
   const double x1 = xr + wheel_base * motion_params_.wheel_gamma_rear * std::cos(yaw);
   const double y1 = yr + wheel_base * motion_params_.wheel_gamma_rear * std::sin(yaw);
-  const double delta_x = x1 - X_t(IDX::X1);
-  const double delta_y = y1 - X_t(IDX::Y1);
+  const double x2 = x1 + wheel_base * std::cos(yaw);
+  const double y2 = y1 + wheel_base * std::sin(yaw);
 
   // update state
   constexpr int DIM_Y = 4;
   Eigen::Matrix<double, DIM_Y, 1> Y;
-  Y << x1, y1, X_t(IDX::X2) + delta_x, X_t(IDX::Y2) + delta_y;
+  Y << x1, y1, x2, y2;
 
   Eigen::Matrix<double, DIM_Y, DIM> C = Eigen::Matrix<double, DIM_Y, DIM>::Zero();
   C(0, IDX::X1) = 1.0;

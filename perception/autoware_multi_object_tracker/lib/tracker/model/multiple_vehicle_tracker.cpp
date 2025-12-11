@@ -51,7 +51,8 @@ bool MultipleVehicleTracker::measure(
 bool MultipleVehicleTracker::conditionedUpdate(
   const types::DynamicObject & measurement, const types::DynamicObject & prediction,
   const autoware_perception_msgs::msg::Shape & tracker_shape, const rclcpp::Time & measurement_time,
-  const types::InputChannel & channel_info, std::string & update_strategy)
+  const types::InputChannel & channel_info, std::string & update_strategy,
+  std::string & alignment_info, std::string & anchor_centers_info, std::string & edge_wheel_offset)
 {
   using Label = autoware_perception_msgs::msg::ObjectClassification;
   const uint8_t label = getHighestProbLabel();
@@ -59,10 +60,12 @@ bool MultipleVehicleTracker::conditionedUpdate(
   // Use the appropriate tracker based on classification and get its strategy
   if (label == Label::BUS || label == Label::TRUCK || label == Label::TRAILER) {
     return big_vehicle_tracker_.conditionedUpdate(
-      measurement, prediction, tracker_shape, measurement_time, channel_info, update_strategy);
+      measurement, prediction, tracker_shape, measurement_time, channel_info,
+      update_strategy, alignment_info, anchor_centers_info, edge_wheel_offset);
   } else {
     return normal_vehicle_tracker_.conditionedUpdate(
-      measurement, prediction, tracker_shape, measurement_time, channel_info, update_strategy);
+      measurement, prediction, tracker_shape, measurement_time, channel_info,
+      update_strategy, alignment_info, anchor_centers_info, edge_wheel_offset);
   }
 }
 

@@ -68,7 +68,8 @@ public:
     const types::DynamicObject & measurement, const types::DynamicObject & prediction,
     const autoware_perception_msgs::msg::Shape & tracker_shape,
     const rclcpp::Time & measurement_time, const types::InputChannel & channel_info,
-    std::string & update_strategy) override;
+    std::string & update_strategy, std::string & alignment_info,
+    std::string & anchor_centers_info, std::string & edge_wheel_offset) override;
 
   bool getTrackedObject(
     const rclcpp::Time & time, types::DynamicObject & object,
@@ -92,7 +93,7 @@ private:
 
   struct EdgeAlignment
   {
-    double min_alignment_distance;
+    double signed_distance;  // Signed distance: meas_edge_pos - pred_edge_pos on prediction axis
     Edge aligned_pred_edge;
     Edge aligned_meas_edge;
   };
@@ -102,8 +103,8 @@ private:
   EdgeAlignment findAlignedEdges(
     const EdgePositions & meas_edges, const types::DynamicObject & prediction) const;
   geometry_msgs::msg::Point calculateAnchorPoint(
-    const EdgePositions & meas_edges, Edge aligned_meas_edge, double predicted_length,
-    const types::DynamicObject & measurement) const;
+    const EdgeAlignment & alignment, double pred_yaw, 
+    const geometry_msgs::msg::Point & pred_center, double pred_length) const;
 };
 
 }  // namespace autoware::multi_object_tracker
