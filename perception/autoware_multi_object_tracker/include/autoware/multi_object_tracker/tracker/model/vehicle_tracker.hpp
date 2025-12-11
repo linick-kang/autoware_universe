@@ -67,7 +67,8 @@ public:
   bool conditionedUpdate(
     const types::DynamicObject & measurement, const types::DynamicObject & prediction,
     const autoware_perception_msgs::msg::Shape & tracker_shape,
-    const rclcpp::Time & measurement_time, const types::InputChannel & channel_info) override;
+    const rclcpp::Time & measurement_time, const types::InputChannel & channel_info,
+    std::string & update_strategy) override;
 
   bool getTrackedObject(
     const rclcpp::Time & time, types::DynamicObject & object,
@@ -87,18 +88,21 @@ private:
     double rear_x, rear_y;
   };
 
-  struct EdgeAlignmentDistances
+  enum class Edge { FRONT, REAR };
+
+  struct EdgeAlignment
   {
-    double front_alignment_distance;
-    double rear_alignment_distance;
+    double min_alignment_distance;
+    Edge aligned_pred_edge;
+    Edge aligned_meas_edge;
   };
 
   // Helper functions for determineUpdateStrategy
   EdgePositions calculateEdgeCenters(const types::DynamicObject & obj) const;
-  EdgeAlignmentDistances calculateAlignmentDistances(
+  EdgeAlignment findAlignedEdges(
     const EdgePositions & meas_edges, const types::DynamicObject & prediction) const;
   geometry_msgs::msg::Point calculateAnchorPoint(
-    const EdgePositions & meas_edges, bool use_front_wheel, double predicted_length,
+    const EdgePositions & meas_edges, Edge aligned_meas_edge, double predicted_length,
     const types::DynamicObject & measurement) const;
 };
 
