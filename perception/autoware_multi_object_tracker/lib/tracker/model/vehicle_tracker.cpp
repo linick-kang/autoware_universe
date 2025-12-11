@@ -443,9 +443,7 @@ UpdateStrategy VehicleTracker::determineUpdateStrategy(
   strategy.type = (alignment.aligned_pred_edge == Edge::FRONT) 
                     ? UpdateStrategyType::FRONT_WHEEL_UPDATE
                     : UpdateStrategyType::REAR_WHEEL_UPDATE;
-  const double pred_yaw = tf2::getYaw(prediction.pose.orientation);
-  strategy.anchor_point = calculateAnchorPoint(
-    alignment, pred_yaw, prediction.pose.position, predicted_length);
+  strategy.anchor_point = calculateAnchorPoint(alignment, measurement);
 
   return strategy;
 }
@@ -509,32 +507,28 @@ VehicleTracker::EdgeAlignment VehicleTracker::findAlignedEdges(
 }
 
 geometry_msgs::msg::Point VehicleTracker::calculateAnchorPoint(
-  const EdgeAlignment & alignment, const double pred_yaw,
-  const geometry_msgs::msg::Point & pred_center, const double pred_length) const
+  const EdgeAlignment & alignment, const types::DynamicObject & measurement) const
 {
   // Calculate the anchor point (edge center) for wheel-based updates
   // updateStatePoseRear/Front will convert edge center to wheel position internally
   
   geometry_msgs::msg::Point anchor_point;
 
-  const double pred_cos_yaw = std::cos(pred_yaw);
-  const double pred_sin_yaw = std::sin(pred_yaw);
-  const double pred_half_length = pred_length * 0.5;
+  const double meas_yaw = tf2::getYaw(measurement.pose.orientation);
+  const double meas_cos_yaw = std::cos(meas_yaw);
+  const double meas_sin_yaw = std::sin(meas_yaw);
+  const double meas_half_length = measurement.shape.dimensions.x * 0.5;
   
-  // Calculate offset from prediction center to measurement edge center along prediction axis
-  // offset = distance_to_pred_edge + signed_distance_to_meas_edge
-  double offset_on_axis;
-  if (alignment.aligned_pred_edge == Edge::FRONT) {
-    // Front edge: center + half_length + signed_distance
-    offset_on_axis = pred_half_length + alignment.signed_distance;
+  // Calculate the matched measurement edge center directly
+  if (alignment.aligned_meas_edge == Edge::FRONT) {
+    // Use measurement front edge center
+    anchor_point.x = measurement.pose.position.x + meas_half_length * meas_cos_yaw;
+    anchor_point.y = measurement.pose.position.y + meas_half_length * meas_sin_yaw;
   } else {
-    // Rear edge: center - half_length + signed_distance
-    offset_on_axis = -pred_half_length + alignment.signed_distance;
+    // Use measurement rear edge center  
+    anchor_point.x = measurement.pose.position.x - meas_half_length * meas_cos_yaw;
+    anchor_point.y = measurement.pose.position.y - meas_half_length * meas_sin_yaw;
   }
-  
-  // Calculate anchor point (edge center) position
-  anchor_point.x = pred_center.x + offset_on_axis * pred_cos_yaw;
-  anchor_point.y = pred_center.y + offset_on_axis * pred_sin_yaw;
   
   return anchor_point;
 }

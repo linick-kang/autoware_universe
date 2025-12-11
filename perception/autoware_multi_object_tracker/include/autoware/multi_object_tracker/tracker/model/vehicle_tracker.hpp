@@ -103,8 +103,7 @@ private:
   EdgeAlignment findAlignedEdges(
     const EdgePositions & meas_edges, const types::DynamicObject & prediction) const;
   geometry_msgs::msg::Point calculateAnchorPoint(
-    const EdgeAlignment & alignment, double pred_yaw, 
-    const geometry_msgs::msg::Point & pred_center, double pred_length) const;
+    const EdgeAlignment & alignment, const types::DynamicObject & measurement) const;
 };
 
 }  // namespace autoware::multi_object_tracker
